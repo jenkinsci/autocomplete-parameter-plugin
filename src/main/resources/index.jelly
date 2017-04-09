@@ -1,0 +1,4 @@
+<?jelly escape-by-default='true'?>
+<div>
+  This plugin introduces a parameter field that allows adding tags that autocompletes from several datasets.
+</div>

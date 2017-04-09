@@ -1,0 +1,41 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
+	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+    <f:entry title="${%Name}" help="/help/parameter/name.html">
+		<f:textbox name="parameter.name" value="${instance.name}" />
+	</f:entry>
+	<f:entry title="${%Default Value}" help="/help/parameter/string-default.html">
+		<f:textbox name="parameter.defaultValue" value="${instance.defaultValue}" />
+	</f:entry>
+    <f:entry title="${%Description}" help="/help/parameter/description.html">
+        <f:textarea name="parameter.description" 
+        			value="${instance.description}" 
+        			codemirror-mode="${app.markupFormatter.codeMirrorMode}" 
+        			codemirror-config="${app.markupFormatter.codeMirrorConfig}" 
+        			previewEndpoint="/markupFormatter/previewDescription" />
+    </f:entry>
+    <f:section title="${%Autocomplete Data Options}">
+	    <f:entry title="${%Label Field}">
+			<f:textbox name="parameter.labelField" value="${instance.labelField}" />
+		</f:entry>
+		<f:entry field="dataSourceType" title="Choose Autocomplete Data Source Type">
+		    <f:select />
+		</f:entry>
+		
+		<div id='source.httpRequest'>
+		    <f:entry title="${%URL}">
+				<f:textbox name="parameter.autoCompleteUrl" value="${instance.autoCompleteUrl}" />
+			</f:entry>
+			<f:entry field="credentialsId" title="Choose the credentials">
+			   <f:select />
+			</f:entry>
+		</div>
+		<div id='source.inline'>
+		    <f:entry title="${%Auto Complete Values}">
+		        <f:textarea name="parameter.autoCompleteData" 
+		        			value="${instance.autoCompleteData}" />
+		    </f:entry>
+		</div>
+	</f:section>
+</j:jelly>
