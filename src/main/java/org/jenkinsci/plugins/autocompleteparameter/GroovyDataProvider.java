@@ -17,25 +17,85 @@ import jenkins.model.Jenkins;
 import net.sf.json.JSONSerializer;
 
 public class GroovyDataProvider extends AutocompleteDataProvider {
-	private SecureGroovyScript script;
+	private String script;
+	private boolean sandbox;
+	private List<ClasspathEntry> classpath;
 	
 	@DataBoundConstructor
-	public GroovyDataProvider(SecureGroovyScript script) {
-		this.setScript(script.configuringWithKeyItem());
+	public GroovyDataProvider(String script, boolean sandbox, List<ClasspathEntry> classpath) {
+		this.script = script;
+		this.sandbox = sandbox;
+		this.classpath = classpath;
 	}
 	
 	@Override
 	public String getData() {
-        ClassLoader cl = Jenkins.getInstance().getPluginManager().uberClassLoader;
+       return runScript(script, sandbox, classpath);
+	}
+	
+	public String getScript() {
+		return script;
+	}
+
+	public void setScript(String script) {
+		this.script = script;
+	}
+	
+	public List<ClasspathEntry> getClasspath() {
+		return classpath;
+	}
+	
+	public void setClasspath(List<ClasspathEntry> classpath) {
+		this.classpath = classpath;
+	}
+
+	public boolean getSandbox() {
+		return sandbox;
+	}
+	
+	public void setSandbox(boolean sandbox) {
+		this.sandbox = sandbox;
+	} 
+
+	@Extension
+	public static final class DescriptorImpl extends Descriptor<AutocompleteDataProvider> {
+		@Override
+		public String getDisplayName() {
+			return "Groovy script";
+		}
+		
+        public FormValidation doTest(StaplerRequest req, @QueryParameter String script, @QueryParameter boolean sandbox, List<ClasspathEntry> classpath)
+        {
+            try
+            {
+            	return FormValidation.ok(runScript(script, sandbox, classpath));
+            }
+            catch(Exception e)
+            {
+                return FormValidation.error(e, "Failed to execute script");
+            }
+        }
+
+	}
+	
+	private static String runScript(String script, boolean sandbox, List<ClasspathEntry> classpath) {
+		if (classpath == null)
+			classpath = Collections.<ClasspathEntry>emptyList();
+		
+		SecureGroovyScript groovyScript = new SecureGroovyScript(script, sandbox, classpath).configuringWithKeyItem();
+		
+		ClassLoader cl = Jenkins.getInstance().getPluginManager().uberClassLoader;
 
         if (cl == null) 
             cl = Thread.currentThread().getContextClassLoader();
 
         Binding binding = new Binding();
         
+        binding.setVariable("jenkins", Jenkins.getInstance());
+        
         Object out;
 		try {
-			out = getScript().evaluate(cl, binding);
+			out = groovyScript.evaluate(cl, binding);
 		} catch (Exception e) {
 			e.printStackTrace();
 			throw new IllegalStateException(e);
@@ -45,58 +105,5 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
         	return "";
         
         return JSONSerializer.toJSON(out).toString();
-	}
-	
-	private static String runScript(SecureGroovyScript script) {
-		 ClassLoader cl = Jenkins.getInstance().getPluginManager().uberClassLoader;
-
-	        if (cl == null) 
-	            cl = Thread.currentThread().getContextClassLoader();
-
-	        Binding binding = new Binding();
-	        
-	        binding.setVariable("jenkins", Jenkins.getInstance());
-	        
-	        Object out;
-			try {
-				out = script.evaluate(cl, binding);
-			} catch (Exception e) {
-				e.printStackTrace();
-				throw new IllegalStateException(e);
-			}
-
-	        if(out == null)
-	        	return "";
-	        
-	        return JSONSerializer.toJSON(out).toString();
-	}
-
-	public SecureGroovyScript getScript() {
-		return script;
-	}
-
-	public void setScript(SecureGroovyScript script) {
-		this.script = script;
-	}
-
-	@Extension
-	public static final class DescriptorImpl extends Descriptor<AutocompleteDataProvider> {
-		@Override
-		public String getDisplayName() {
-			return "Groovy script";
-		}
-		
-        public FormValidation doTest(StaplerRequest req, @QueryParameter String script, @QueryParameter boolean sandbox)
-        {
-            try
-            {
-            	return FormValidation.ok(runScript(new SecureGroovyScript(script, sandbox, Collections.<ClasspathEntry>emptyList()).configuringWithKeyItem()));
-            }
-            catch(Exception e)
-            {
-                return FormValidation.error(e, "Failed to execute script");
-            }
-        }
-
-	}
+	}	
 }

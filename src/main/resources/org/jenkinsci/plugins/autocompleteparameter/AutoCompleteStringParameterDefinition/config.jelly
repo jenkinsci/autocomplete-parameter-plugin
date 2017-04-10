@@ -15,12 +15,11 @@
         			codemirror-config="${app.markupFormatter.codeMirrorConfig}" 
         			previewEndpoint="/markupFormatter/previewDescription" />
     </f:entry>
-    <f:section title="${%Autocomplete Data Options}">
-	    <f:entry title="${%Token field}">
-			<f:textbox name="parameter.labelField" value="${instance.labelField}" />
-		</f:entry>
-		<f:dropdownDescriptorSelector title="${%Auto Complete Data Provider}" 
-			field="dataProvider" descriptors="${descriptor.dataProviders}" />
 
-	</f:section>
+    <f:entry title="${%Token field}" field="labelField">
+		<f:textbox name="parameter.labelField" value="${instance.labelField}" />
+	</f:entry>
+	<f:dropdownDescriptorSelector title="${%Auto Complete Data Provider}" 
+		field="dataProvider" descriptors="${descriptor.dataProviders}" />
+	
 </j:jelly>

@@ -2,22 +2,14 @@ package org.jenkinsci.plugins.autocompleteparameter;
 
 import java.util.List;
 
-import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
 
-import com.cloudbees.plugins.credentials.common.StandardListBoxModel;
-import com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials;
-
 import hudson.Extension;
 import hudson.model.Descriptor;
-import hudson.model.Item;
 import hudson.model.ParameterValue;
 import hudson.model.StringParameterDefinition;
-import hudson.security.ACL;
-import hudson.util.ListBoxModel;
 import net.sf.json.JSONObject;
 
 public class AutoCompleteStringParameterDefinition extends StringParameterDefinition {

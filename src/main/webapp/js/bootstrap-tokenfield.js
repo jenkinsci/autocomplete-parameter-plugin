@@ -863,10 +863,18 @@
     }
 
     /**
-     * Update tokenfield dimensions
+     * Update tokenfield dimensions just to make sure the text is not clipped
      */
   , update: function (e) {
-	  this.$input.attr('size', this.$input.val().length)
+	  var txt = this.$input.prev('.tt-hint').val();
+	  if (!txt)
+		  txt = this.$input.val();
+	  
+      var fakeEl = $('<span>').hide().appendTo(document.body).text(txt).css({font: this.$input.css('font'), whiteSpace: "pre"})
+      var width = fakeEl.width() + 20;
+      fakeEl.remove();
+      
+	  this.$input.css('min-width', width+"px")
     }
 
   , focusInput: function (e) {
