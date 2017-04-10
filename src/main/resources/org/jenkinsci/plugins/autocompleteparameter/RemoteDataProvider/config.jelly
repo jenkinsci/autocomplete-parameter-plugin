@@ -1,0 +1,13 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
+	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+    
+    <f:entry title="${%URL}">
+		<f:textbox name="parameter.autoCompleteUrl" value="${instance.autoCompleteUrl}" />
+	</f:entry>
+	<f:entry field="credentialsId" title="Choose the credentials">
+	   <f:select />
+	</f:entry>
+
+</j:jelly>

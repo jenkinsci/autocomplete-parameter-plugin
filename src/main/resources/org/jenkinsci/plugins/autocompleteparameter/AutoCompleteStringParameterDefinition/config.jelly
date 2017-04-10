@@ -16,26 +16,11 @@
         			previewEndpoint="/markupFormatter/previewDescription" />
     </f:entry>
     <f:section title="${%Autocomplete Data Options}">
-	    <f:entry title="${%Label Field}">
+	    <f:entry title="${%Token field}">
 			<f:textbox name="parameter.labelField" value="${instance.labelField}" />
 		</f:entry>
-		<f:entry field="dataSourceType" title="Choose Autocomplete Data Source Type">
-		    <f:select />
-		</f:entry>
-		
-		<div id='source.httpRequest'>
-		    <f:entry title="${%URL}">
-				<f:textbox name="parameter.autoCompleteUrl" value="${instance.autoCompleteUrl}" />
-			</f:entry>
-			<f:entry field="credentialsId" title="Choose the credentials">
-			   <f:select />
-			</f:entry>
-		</div>
-		<div id='source.inline'>
-		    <f:entry title="${%Auto Complete Values}">
-		        <f:textarea name="parameter.autoCompleteData" 
-		        			value="${instance.autoCompleteData}" />
-		    </f:entry>
-		</div>
+		<f:dropdownDescriptorSelector title="${%Auto Complete Data Provider}" 
+			field="dataProvider" descriptors="${descriptor.dataProviders}" />
+
 	</f:section>
 </j:jelly>
