@@ -2,6 +2,8 @@ package org.jenkinsci.plugins.autocompleteparameter;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript;
 import org.jenkinsci.plugins.scriptsecurity.scripts.ClasspathEntry;
@@ -90,8 +92,8 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
             cl = Thread.currentThread().getContextClassLoader();
 
         Binding binding = new Binding();
-        
-        binding.setVariable("jenkins", Jenkins.getInstance());
+        for (Entry<String, String> envVar : GlobalVariableUtils.getGlobalVariables().entrySet()) 
+			binding.setVariable(envVar.getKey(), envVar.getValue());
         
         Object out;
 		try {

@@ -2,6 +2,9 @@ package org.jenkinsci.plugins.autocompleteparameter;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
@@ -17,10 +20,13 @@ import com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredenti
 import com.cloudbees.plugins.credentials.domains.URIRequirementBuilder;
 
 import hudson.Extension;
+import hudson.Util;
 import hudson.model.Descriptor;
 import hudson.model.Item;
 import hudson.security.ACL;
+import hudson.slaves.EnvironmentVariablesNodeProperty;
 import hudson.util.ListBoxModel;
+import jenkins.model.Jenkins;
 
 public class RemoteDataProvider extends AutocompleteDataProvider {
 
@@ -76,6 +82,7 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 	}
 
 	private static String performRequest(String uri, StandardUsernamePasswordCredentials credentials) {
+		uri = GlobalVariableUtils.resolveVariables(uri);
 		try {
 			URL url = new URL(uri);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
