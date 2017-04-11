@@ -1,6 +1,9 @@
-function createParameter($, element, labelField, autocompleteValues, errorHandler) {
+function createParameter($, element, labelField, autocompleteValues, allowUnrecognizedTokens, errorHandler) {
 	if (autocompleteValues.indexOf("ERROR:")>=0)
 		return errorHandler(autocompleteValues);
+		
+	if (typeof allowUnrecognizedTokens == 'undefined')
+		allowUnrecognizedTokens = false;
 
 	labelField = labelField.trim();
     var engineValues = []; 
@@ -58,6 +61,8 @@ function createParameter($, element, labelField, autocompleteValues, errorHandle
 	    }}] 
 	});
 
+	if (allowUnrecognizedTokens) return;
+	
 	element.on("tokenfield:createtoken", function(e) {
 	    var isValid =false; 
 	    engine.local.forEach(function(l) {

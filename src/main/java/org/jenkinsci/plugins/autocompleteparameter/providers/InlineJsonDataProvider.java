@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.autocompleteparameter;
+package org.jenkinsci.plugins.autocompleteparameter.providers;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 

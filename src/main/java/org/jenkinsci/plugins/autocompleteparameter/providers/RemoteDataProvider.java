@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.autocompleteparameter;
+package org.jenkinsci.plugins.autocompleteparameter.providers;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -8,6 +8,7 @@ import java.util.Map;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;

@@ -1,10 +1,11 @@
-package org.jenkinsci.plugins.autocompleteparameter;
+package org.jenkinsci.plugins.autocompleteparameter.providers;
 
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
 import org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript;
 import org.jenkinsci.plugins.scriptsecurity.scripts.ClasspathEntry;
 import org.kohsuke.stapler.DataBoundConstructor;

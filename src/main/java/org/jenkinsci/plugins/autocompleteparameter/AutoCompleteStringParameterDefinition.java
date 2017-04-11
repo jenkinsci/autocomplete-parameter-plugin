@@ -2,6 +2,7 @@ package org.jenkinsci.plugins.autocompleteparameter;
 
 import java.util.List;
 
+import org.jenkinsci.plugins.autocompleteparameter.providers.AutocompleteDataProvider;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
 import org.kohsuke.stapler.export.Exported;
@@ -16,16 +17,19 @@ public class AutoCompleteStringParameterDefinition extends StringParameterDefini
 	private static final long serialVersionUID = 2691768740499486855L;
 	private String labelField;
 	private AutocompleteDataProvider dataProvider;
+	private boolean allowUnrecognizedTokens;
 	
 	@DataBoundConstructor
 	public AutoCompleteStringParameterDefinition(String name, 
 			String defaultValue, 
 			String description, 
 			String labelField,
+			boolean allowUnrecognizedTokens,
 			AutocompleteDataProvider dataProvider) 
 	{
 		super(name, defaultValue, description);
 		this.labelField = labelField;
+		this.allowUnrecognizedTokens = allowUnrecognizedTokens;
 		this.dataProvider = dataProvider;
 	}
 
@@ -69,6 +73,15 @@ public class AutoCompleteStringParameterDefinition extends StringParameterDefini
 			return "'ERROR: Autocomplete data generation failure: " + e.getMessage()+"'";
 		}
 	}
+	
+	public boolean isAllowUnrecognizedTokens() {
+		return allowUnrecognizedTokens;
+	}
+
+	public void setAllowUnrecognizedTokens(boolean allowUnrecognizedTokens) {
+		this.allowUnrecognizedTokens = allowUnrecognizedTokens;
+	}
+
 
 	@Extension
     public static final class DescriptImpl extends ParameterDescriptor {
