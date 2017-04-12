@@ -2,13 +2,12 @@ package org.jenkinsci.plugins.autocompleteparameter.providers;
 
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.Collection;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
+import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
@@ -21,13 +20,10 @@ import com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredenti
 import com.cloudbees.plugins.credentials.domains.URIRequirementBuilder;
 
 import hudson.Extension;
-import hudson.Util;
 import hudson.model.Descriptor;
 import hudson.model.Item;
 import hudson.security.ACL;
-import hudson.slaves.EnvironmentVariablesNodeProperty;
 import hudson.util.ListBoxModel;
-import jenkins.model.Jenkins;
 
 public class RemoteDataProvider extends AutocompleteDataProvider {
 
@@ -41,9 +37,11 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 	}
 
 	@Override
-	public String getData() {
+	public Collection<?> getData() {
 		StandardUsernamePasswordCredentials credentials = lookupCredentials(autoCompleteUrl);
-		return performRequest(autoCompleteUrl, credentials);
+		String response = performRequest(autoCompleteUrl, credentials);
+		
+		return JSONUtils.toCanonicalCollection(response);
 	}
 
 	@Exported
@@ -72,13 +70,15 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 	}
 	
 	private StandardUsernamePasswordCredentials lookupCredentials(String uri) {
+		if (credentialsId == null) 
+			return null;
 		return CredentialsMatchers.firstOrNull(
 				CredentialsProvider.lookupCredentials(
 						StandardUsernamePasswordCredentials.class,
 						(Item)null,
 						ACL.SYSTEM,
 						URIRequirementBuilder.fromUri(uri).build()),
-					CredentialsMatchers.withId(getCredentialsId())
+					CredentialsMatchers.withId(credentialsId)
 				);
 	}
 

@@ -1,11 +1,12 @@
 package org.jenkinsci.plugins.autocompleteparameter.providers;
 
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
+import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
 import org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript;
 import org.jenkinsci.plugins.scriptsecurity.scripts.ClasspathEntry;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -17,7 +18,6 @@ import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.util.FormValidation;
 import jenkins.model.Jenkins;
-import net.sf.json.JSONSerializer;
 
 public class GroovyDataProvider extends AutocompleteDataProvider {
 	private String script;
@@ -32,7 +32,7 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
 	}
 	
 	@Override
-	public String getData() {
+	public Collection<?> getData() {
        return runScript(script, sandbox, classpath);
 	}
 	
@@ -71,7 +71,7 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
         {
             try
             {
-            	return FormValidation.ok(runScript(script, sandbox, classpath));
+            	return FormValidation.ok(JSONUtils.toJSON(runScript(script, sandbox, classpath)));
             }
             catch(Exception e)
             {
@@ -81,7 +81,7 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
 
 	}
 	
-	private static String runScript(String script, boolean sandbox, List<ClasspathEntry> classpath) {
+	private static Collection<?> runScript(String script, boolean sandbox, List<ClasspathEntry> classpath) {
 		if (classpath == null)
 			classpath = Collections.<ClasspathEntry>emptyList();
 		
@@ -103,10 +103,13 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
 			e.printStackTrace();
 			throw new IllegalStateException(e);
 		}
+		if(out == null)
+			return Collections.emptyList();
+		
+		if (out instanceof Collection)
+			return (Collection<?>) out;
 
-        if(out == null)
-        	return "";
         
-        return JSONSerializer.toJSON(out).toString();
+        throw new IllegalStateException("");
 	}	
 }

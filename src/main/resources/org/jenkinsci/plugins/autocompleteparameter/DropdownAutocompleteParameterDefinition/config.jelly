@@ -1,0 +1,24 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
+	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+	<f:entry title="${%Name}" help="/help/parameter/name.html">
+		<f:textbox name="parameter.name" value="${instance.name}" />
+	</f:entry>
+    <f:entry title="${%Description}" help="/help/parameter/description.html">
+        <f:textarea name="parameter.description" 
+        			value="${instance.description}" 
+        			codemirror-mode="${app.markupFormatter.codeMirrorMode}" 
+        			codemirror-config="${app.markupFormatter.codeMirrorConfig}" 
+        			previewEndpoint="/markupFormatter/previewDescription" />
+    </f:entry>
+    <f:entry title="${%Token field}" field="displayExpression">
+		<f:textbox name="parameter.displayExpression" value="${instance.displayExpression}" />
+	</f:entry>
+	<f:entry title="${%Default Value}">
+		<f:textbox name="parameter.defaultValue" value="${defaultValue.name}" />
+	</f:entry>
+	<f:dropdownDescriptorSelector title="${%Auto Complete Data Provider}" 
+		field="dataProvider" descriptors="${descriptor.dataProviders}" />
+	
+</j:jelly>

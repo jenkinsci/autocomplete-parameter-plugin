@@ -1,0 +1,25 @@
+<div>
+For data providers that returns JSON arrays, you can specify the field that will be used as values to autocomplete in the field.
+You can use just the name of the field or you can write javascript expressions between {} that will compose the values of the json
+objects to compose the value.<br>
+
+If the dataset returns a simple list of strings, the value of this field is ignored.<br>
+
+Some examples. Let's assume the dataset resulted in the following json:<br>
+<pre>
+[
+	{"name": "Eddard Stark","id":"estark", "house":"Stark"},
+	{"name": "John Snow","id":"jsnow", "house":"Stark"},
+	{"name": "Tyrion Lannister","id":"tlannister", "house":"Lannister"},
+	...
+]
+</pre>
+
+Some valid examples:
+	<ul>
+		<li>name</li>
+		<li>house</li>
+		<li>{$name}</li>
+		<li>{$name+" ("+$house+")"}</li>
+	</ul>
+</div>

@@ -1,8 +1,7 @@
 package org.jenkinsci.plugins.autocompleteparameter.providers;
 
-import static net.sf.json.JSONSerializer.toJSON;
-
 import java.util.Arrays;
+import java.util.Collection;
 
 import org.kohsuke.stapler.DataBoundConstructor;
 
@@ -18,8 +17,8 @@ public class SimpleTextProvider extends AutocompleteDataProvider {
 	}
 
 	@Override
-	public String getData() {
-		return toJSON(Arrays.asList(autoCompleteData.split("\n"))).toString();
+	public Collection<?> getData() {
+		return Arrays.asList(autoCompleteData.split("\n"));
 	}
 	
 	@Extension

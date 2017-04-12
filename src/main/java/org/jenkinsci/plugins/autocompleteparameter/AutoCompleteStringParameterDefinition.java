@@ -68,7 +68,7 @@ public class AutoCompleteStringParameterDefinition extends StringParameterDefini
 	@Exported
 	public String getAutoCompleteValuesScript() {
 		try {
-			return dataProvider.getData();
+			return JSONUtils.toJSON(dataProvider.getData());
 		}catch(Exception e) {
 			return "'ERROR: Autocomplete data generation failure: " + e.getMessage()+"'";
 		}

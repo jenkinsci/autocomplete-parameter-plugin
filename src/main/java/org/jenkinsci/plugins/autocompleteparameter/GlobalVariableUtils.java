@@ -16,7 +16,11 @@ public class GlobalVariableUtils {
 
 	public static Map<String, String> getGlobalVariables() {
 		Map<String, String> vars = new LinkedHashMap<String, String>();
-		List<EnvironmentVariablesNodeProperty> all = Jenkins.getInstance().getGlobalNodeProperties().getAll(EnvironmentVariablesNodeProperty.class);
+		Jenkins instance = Jenkins.getInstance();
+		if (instance == null)
+			return vars;
+		
+		List<EnvironmentVariablesNodeProperty> all = instance.getGlobalNodeProperties().getAll(EnvironmentVariablesNodeProperty.class);
 		for (EnvironmentVariablesNodeProperty environmentVariablesNodeProperty : all) 
 			vars.putAll(environmentVariablesNodeProperty.getEnvVars());
 		

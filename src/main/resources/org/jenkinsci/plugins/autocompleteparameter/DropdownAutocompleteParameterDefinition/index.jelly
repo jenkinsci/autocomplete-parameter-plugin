@@ -1,0 +1,30 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
+	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
+	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
+	
+  	<script src="${rootURL}/plugin/autocomplete-parameter/js/jquery-1.11.1.min.js"/>
+  	<script type="text/javascript">
+  		$.noConflict();
+  	</script>
+	<script src="${rootURL}/plugin/autocomplete-parameter/chosen/chosen.jquery.min.js"/>
+	<script src="${rootURL}/plugin/autocomplete-parameter/chosen/chosen.proto.min.js"/>
+	<link rel="stylesheet" type="text/css" href="${rootURL}/plugin/autocomplete-parameter/chosen/chosen.min.css" />
+  
+	<f:entry title="${it.name}" description="${it.formattedDescription}">
+	<div name="parameter">
+		<input type="hidden" name="name" value="${it.name}" />
+        <select name="value" id="${it.name}_select">
+          <f:option/>
+          <j:forEach var="v" items="${it.choices.entrySet()}">
+            <f:option selected="${it.defaultValue==v.value}" value="${v.key}">${v.value}</f:option>
+          </j:forEach>
+        </select>
+	</div>
+	</f:entry>
+	<script>
+		jQuery(document).ready(function($$) {
+			$$("#${it.name}_select").chosen();
+		})
+	</script>
+</j:jelly>
