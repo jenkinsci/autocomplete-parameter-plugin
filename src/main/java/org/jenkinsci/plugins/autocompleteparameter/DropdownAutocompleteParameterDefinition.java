@@ -1,10 +1,13 @@
 package org.jenkinsci.plugins.autocompleteparameter;
 
 import java.util.Collection;
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
+import org.codehaus.groovy.ant.Groovy;
 import org.jenkinsci.plugins.autocompleteparameter.providers.AutocompleteDataProvider;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
@@ -61,13 +64,24 @@ public class DropdownAutocompleteParameterDefinition extends SimpleParameterDefi
 	public Map<String, String> getChoices() {
 		Collection<?> data = dataProvider.getData();
 		
-		LinkedHashMap<String, String> linkedHashMap = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> choices = new LinkedHashMap<String, String>();
+		Transformer<JSONObject> tranform;
+		if (displayExpression.matches("[{].*[}]")) {
+			tranform = new Transformer<JSONObject>() { @Override public String transform(JSONObject o) {
+				return displayExpression;
+			}};
+		}
+		else {
+			tranform = new Transformer<JSONObject>() { @Override public String transform(JSONObject o) {
+				return o.getString(displayExpression);
+			}};
+		}
 		
 		for (Object object : data) {
-			JSONObject fromObject = JSONObject.fromObject(object);
-			linkedHashMap.put(JSONUtils.toJSON(object), fromObject.getString(displayExpression));
+			JSONObject jsonObject = JSONObject.fromObject(object);
+			choices.put(JSONUtils.toJSON(object), tranform.transform(jsonObject));
 		}
-		return linkedHashMap;
+		return choices;
 	}
 
     @Override

@@ -90,7 +90,7 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 			conn.addRequestProperty("Accept-Encoding", "gzip,deflate");
 			conn.addRequestProperty("Accept", "*/*");
 			if (credentials != null) {
-				String auth = Base64.encodeBase64String((credentials.getUsername() + ":" + credentials.getPassword()).getBytes());
+				String auth = Base64.encodeBase64String((credentials.getUsername() + ":" + credentials.getPassword()).getBytes("UTF-8"));
 				conn.addRequestProperty("Authorization", "Basic " + auth);
 			}
 			return IOUtils.toString(conn.getInputStream(), "UTF-8");

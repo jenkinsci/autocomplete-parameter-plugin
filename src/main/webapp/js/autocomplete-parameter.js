@@ -1,3 +1,16 @@
+function convertToChosen($, $element)
+{
+	$element.find("option").each(function(i, option) {
+		if (option.label.match(/^[{].*[}]$/)) {
+			var v = JSON.parse(option.value);
+			var expr = option.label.substr(1,option.label.length-2);
+			expr = expr.replace(/[$]([a-zA-Z][a-zA-Z0-9$]*)/g,"v['$1']")
+			option.innerHTML = eval(expr);
+		}
+	});
+	$element.chosen();
+}
+
 function createParameter($, element, labelField, autocompleteValues, allowUnrecognizedTokens, errorHandler) {
 	if (autocompleteValues.indexOf("ERROR:")>=0)
 		return errorHandler(autocompleteValues);

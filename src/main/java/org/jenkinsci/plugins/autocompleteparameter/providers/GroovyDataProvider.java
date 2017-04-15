@@ -2,11 +2,13 @@ package org.jenkinsci.plugins.autocompleteparameter.providers;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
 import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
+import org.jenkinsci.plugins.autocompleteparameter.SafeJenkins;
 import org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript;
 import org.jenkinsci.plugins.scriptsecurity.scripts.ClasspathEntry;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -17,15 +19,14 @@ import groovy.lang.Binding;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.util.FormValidation;
-import jenkins.model.Jenkins;
 
 public class GroovyDataProvider extends AutocompleteDataProvider {
 	private String script;
 	private boolean sandbox;
-	private List<ClasspathEntry> classpath;
+	private LinkedList<ClasspathEntry> classpath;
 	
 	@DataBoundConstructor
-	public GroovyDataProvider(String script, boolean sandbox, List<ClasspathEntry> classpath) {
+	public GroovyDataProvider(String script, boolean sandbox, LinkedList<ClasspathEntry> classpath) {
 		this.script = script;
 		this.sandbox = sandbox;
 		this.classpath = classpath;
@@ -48,7 +49,7 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
 		return classpath;
 	}
 	
-	public void setClasspath(List<ClasspathEntry> classpath) {
+	public void setClasspath(LinkedList<ClasspathEntry> classpath) {
 		this.classpath = classpath;
 	}
 
@@ -67,7 +68,7 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
 			return "Groovy script";
 		}
 		
-        public FormValidation doTest(StaplerRequest req, @QueryParameter String script, @QueryParameter boolean sandbox, List<ClasspathEntry> classpath)
+        public FormValidation doTest(StaplerRequest req, @QueryParameter String script, @QueryParameter boolean sandbox, LinkedList<ClasspathEntry> classpath)
         {
             try
             {
@@ -87,7 +88,7 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
 		
 		SecureGroovyScript groovyScript = new SecureGroovyScript(script, sandbox, classpath).configuringWithKeyItem();
 		
-		ClassLoader cl = Jenkins.getInstance().getPluginManager().uberClassLoader;
+		ClassLoader cl = SafeJenkins.getInstanceOrCry().getPluginManager().uberClassLoader;
 
         if (cl == null) 
             cl = Thread.currentThread().getContextClassLoader();

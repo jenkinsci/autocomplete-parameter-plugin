@@ -24,7 +24,7 @@
 	</f:entry>
 	<script>
 		jQuery(document).ready(function($$) {
-			$$("#${it.name}_select").chosen();
+			convertToChosen($$,$$("#${it.name}_select"))
 		})
 	</script>
 </j:jelly>
