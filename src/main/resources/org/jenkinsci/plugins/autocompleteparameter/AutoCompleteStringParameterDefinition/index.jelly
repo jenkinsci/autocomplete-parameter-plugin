@@ -21,11 +21,14 @@
 		
 	  	<script type="text/javascript">
 	  		jQuery( document ).ready(function( $$ ) {
-	  			createParameter($$, $$("#autocomplete-${it.name}"), "${it.labelFieldJsSafe}", ${it.autoCompleteValuesScript},
-	  			${it.allowUnrecognizedTokens}, 
-	  			function(error) {
-	  				$$("#error_${it.name}").html(error);
-	  			});
+	  			createParameter($$, $$("#autocomplete-${it.name}"), 
+		  			${it.displayExpressionJsSafe}, 
+		  			${it.valueExpressionJsSafe}, 
+		  			${it.autoCompleteValuesScript},
+		  			${it.allowUnrecognizedTokens}, 
+		  			function(error) {
+		  				$$("#error_${it.name}").html(error);
+		  			});
 	  		})
 		</script>
 		<span class='token-autocomplete-error' id="error_${it.name}"></span>

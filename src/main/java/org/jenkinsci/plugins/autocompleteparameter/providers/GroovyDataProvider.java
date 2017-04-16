@@ -15,14 +15,18 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
+import edu.umd.cs.findbugs.annotations.SuppressFBWarnings;
 import groovy.lang.Binding;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.util.FormValidation;
 
 public class GroovyDataProvider extends AutocompleteDataProvider {
+	private static final long serialVersionUID = -6438474876305562245L;
 	private String script;
 	private boolean sandbox;
+	
+	@SuppressFBWarnings(value="SE_BAD_FIELD", justification="ClasspathEntry has a single field URL which is actually Serializable")
 	private LinkedList<ClasspathEntry> classpath;
 	
 	@DataBoundConstructor
@@ -45,7 +49,7 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
 		this.script = script;
 	}
 	
-	public List<ClasspathEntry> getClasspath() {
+	public LinkedList<ClasspathEntry> getClasspath() {
 		return classpath;
 	}
 	

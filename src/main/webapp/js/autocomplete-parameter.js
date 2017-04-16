@@ -1,34 +1,65 @@
-function convertToChosen($, $element)
-{
-	$element.find("option").each(function(i, option) {
-		if (option.label.match(/^[{].*[}]$/)) {
-			var v = JSON.parse(option.value);
-			var expr = option.label.substr(1,option.label.length-2);
-			expr = expr.replace(/[$]([a-zA-Z][a-zA-Z0-9$]*)/g,"v['$1']")
-			option.innerHTML = eval(expr);
-		}
-	});
-	$element.chosen();
+function getFirstValue(obj) {
+	for (var i in obj) {
+		return obj[i];
+	}
 }
 
-function createParameter($, element, labelField, autocompleteValues, allowUnrecognizedTokens, errorHandler) {
+function evaluateExpression(expression, bindings, errorHandler)
+{
+	try {
+		var v = bindings;
+		for (key in v) {
+			value=v[key];
+			eval("var " + key+"='"+value.replace(/'/g,"\\'")+"'");
+		}
+		var expr = expression.substr(1,expression.length-2);
+		if (expr.trim().length == 0) {
+			if (Object.keys(bindings).length == 1)
+				return getFirstValue(bindings);
+			return JSON.stringify(bindings);
+		}
+		
+		return eval(expr);
+	}catch(e) {
+		errorHandler("Failure evaluating expression : '"+expression+"' "+ e.message);
+	}
+}
+
+function convertToChosen($, $element, displayExpression, valueExpression, errorHandler)
+{
+	$element.find("option").each(function(i, option) {
+		var bindings;
+		try {
+			bindings = JSON.parse(option.value);
+		}catch(e) {
+			// value is not json, probably scalar value
+			bindings = {value:option.value}
+		}
+
+		option.innerHTML = evaluateExpression(displayExpression, bindings, errorHandler);
+		option.value = evaluateExpression(valueExpression, bindings, errorHandler);		
+	});
+	$element.chosen();
+	$('.chosen-container').css({"min-width": "200px"});	
+}
+
+function createParameter($, element, displayExpression, valueExpression, autocompleteValues, allowUnrecognizedTokens, errorHandler) {
 	if (autocompleteValues.indexOf("ERROR:")>=0)
 		return errorHandler(autocompleteValues);
 		
 	if (typeof allowUnrecognizedTokens == 'undefined')
 		allowUnrecognizedTokens = false;
 
-	labelField = labelField.trim();
+	displayExpression = displayExpression.trim();
     var engineValues = []; 
     autocompleteValues.forEach(function(v) {
     	if (typeof v === 'object') {
-    		var l = v[labelField];
-    		if (labelField[0] == '{') {
-    			var expr = labelField.substring(1,labelField.length-1)
-    			expr = expr.replace(/[$]([a-zA-Z][a-zA-Z0-9$]*)/g,"v['$1']")
-    			l = eval(expr);
-    		}
-    		engineValues.push({label: l, value: JSON.stringify(v)});
+    		var l = JSON.stringify(v);
+    		if (displayExpression[0] == '{') 
+    			l = evaluateExpression(displayExpression, v, errorHandler);
+    		var value = evaluateExpression(valueExpression, v, errorHandler);
+    		
+    		engineValues.push({label: l, value: value});
     	}
     	else
     		engineValues.push({label: v, value:v});

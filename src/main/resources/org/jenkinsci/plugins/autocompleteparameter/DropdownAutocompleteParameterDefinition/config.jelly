@@ -12,7 +12,7 @@
         			codemirror-config="${app.markupFormatter.codeMirrorConfig}" 
         			previewEndpoint="/markupFormatter/previewDescription" />
     </f:entry>
-    <f:entry title="${%Token field}" field="displayExpression">
+    <f:entry title="${%Display Expression}" field="displayExpression">
 		<f:textbox name="parameter.displayExpression" value="${instance.displayExpression}" />
 	</f:entry>
 	<f:entry title="${%Default Value}">

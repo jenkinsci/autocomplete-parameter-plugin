@@ -9,6 +9,7 @@ import hudson.Extension;
 import hudson.model.Descriptor;
 
 public class SimpleTextProvider extends AutocompleteDataProvider {
+	private static final long serialVersionUID = -9208140863503788547L;
 	private String autoCompleteData;
 	
 	@DataBoundConstructor
@@ -19,6 +20,14 @@ public class SimpleTextProvider extends AutocompleteDataProvider {
 	@Override
 	public Collection<?> getData() {
 		return Arrays.asList(autoCompleteData.split("\n"));
+	}
+	
+	public String getAutoCompleteData() {
+		return autoCompleteData;
+	}
+	
+	public void setAutoCompleteData(String autoCompleteData) {
+		this.autoCompleteData = autoCompleteData;
 	}
 	
 	@Extension

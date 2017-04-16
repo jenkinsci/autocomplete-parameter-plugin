@@ -15,8 +15,11 @@
         			codemirror-config="${app.markupFormatter.codeMirrorConfig}" 
         			previewEndpoint="/markupFormatter/previewDescription" />
     </f:entry>
-    <f:entry title="${%Token field}" field="labelField">
-		<f:textbox name="parameter.labelField" value="${instance.labelField}" />
+    <f:entry title="${%Display Expression}" field="displayExpression">
+		<f:textbox name="parameter.displayExpression" value="${instance.displayExpression}" />
+	</f:entry>
+	<f:entry title="${%Value Expression}" field="valueExpression">
+		<f:textbox name="parameter.valueExpression" value="${instance.valueExpression}" />
 	</f:entry>
 	<f:entry field="allowUnrecognizedTokens">
     	<f:checkbox title="${%Allow Unrecognized Tokens}" default="false"/>

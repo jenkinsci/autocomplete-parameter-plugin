@@ -9,9 +9,10 @@ import hudson.DescriptorExtensionList;
 import hudson.ExtensionPoint;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
-import jenkins.model.Jenkins;
 
+@SuppressWarnings("serial")
 public abstract class AutocompleteDataProvider implements Describable<AutocompleteDataProvider>, ExtensionPoint, Serializable {
+
 	public abstract Collection<?> getData();
 	
 	public static DescriptorExtensionList<AutocompleteDataProvider, Descriptor<AutocompleteDataProvider>> all() {

@@ -20,11 +20,17 @@
             <f:option selected="${it.defaultValue==v.value}" value="${v.key}">${v.value}</f:option>
           </j:forEach>
         </select>
+        <span class='token-autocomplete-error' id="error_${it.name}"></span>
 	</div>
 	</f:entry>
 	<script>
 		jQuery(document).ready(function($$) {
-			convertToChosen($$,$$("#${it.name}_select"))
+			convertToChosen($$,$$("#${it.name}_select"),
+				${it.displayExpressionJsSafe},
+				${it.valueExpressionJsSafe},
+				function(error) {
+		  			$$("#error_${it.name}").html(error);
+		  		})
 		})
 	</script>
 </j:jelly>

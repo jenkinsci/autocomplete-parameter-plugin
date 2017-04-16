@@ -3,7 +3,7 @@
 	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
 	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
     
-    <f:entry title="${%URL}">
+    <f:entry title="${%URL}" field="autoCompleteUrl">
 		<f:textbox name="parameter.autoCompleteUrl" value="${instance.autoCompleteUrl}" />
 	</f:entry>
 	<f:entry field="credentialsId" title="Choose the credentials">

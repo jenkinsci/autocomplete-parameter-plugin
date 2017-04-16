@@ -26,7 +26,8 @@ import hudson.security.ACL;
 import hudson.util.ListBoxModel;
 
 public class RemoteDataProvider extends AutocompleteDataProvider {
-
+	private static final long serialVersionUID = 5773462762109544336L;
+	
 	private String autoCompleteUrl;
 	private String credentialsId;
 	

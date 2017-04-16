@@ -1,13 +1,10 @@
 package org.jenkinsci.plugins.autocompleteparameter;
 
 import java.util.Collection;
-import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
-import org.codehaus.groovy.ant.Groovy;
 import org.jenkinsci.plugins.autocompleteparameter.providers.AutocompleteDataProvider;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
@@ -18,23 +15,27 @@ import hudson.model.Descriptor;
 import hudson.model.ParameterValue;
 import hudson.model.SimpleParameterDefinition;
 import hudson.model.StringParameterValue;
+import net.sf.json.JSONException;
 import net.sf.json.JSONObject;
 
 @SuppressWarnings("serial")
 public class DropdownAutocompleteParameterDefinition extends SimpleParameterDefinition {
 	private AutocompleteDataProvider dataProvider;
 	private String displayExpression;
+	private String valueExpression;
 	private String defaultValue;
 	
 	@DataBoundConstructor
 	public DropdownAutocompleteParameterDefinition(String name, 
 			String description, 
 			String displayExpression,
+			String valueExpression,
 			String defaultValue,
 			AutocompleteDataProvider dataProvider) 
 	{
 		super(name, description);
 		this.displayExpression = displayExpression;
+		this.valueExpression = valueExpression;
 		this.defaultValue = defaultValue;
 		this.dataProvider = dataProvider;
 	}
@@ -47,8 +48,28 @@ public class DropdownAutocompleteParameterDefinition extends SimpleParameterDefi
 		this.dataProvider = dataProvider;
 	}
 	
+	@Exported
 	public String getDisplayExpression() {
 		return displayExpression;
+	}
+	
+	@Exported
+	public String getValueExpression() {
+		return valueExpression;
+	}
+	
+	@Exported
+	public String getDisplayExpressionJsSafe() {
+		return Utils.normalizeExpression(displayExpression);
+	}
+	
+	@Exported
+	public String getValueExpressionJsSafe() {
+		return Utils.normalizeExpression(valueExpression);
+	}
+	
+	public void setValueExpression(String valueExpression) {
+		this.valueExpression = valueExpression;
 	}
 	
 	@Exported
@@ -65,21 +86,16 @@ public class DropdownAutocompleteParameterDefinition extends SimpleParameterDefi
 		Collection<?> data = dataProvider.getData();
 		
 		LinkedHashMap<String, String> choices = new LinkedHashMap<String, String>();
-		Transformer<JSONObject> tranform;
-		if (displayExpression.matches("[{].*[}]")) {
-			tranform = new Transformer<JSONObject>() { @Override public String transform(JSONObject o) {
-				return displayExpression;
-			}};
-		}
-		else {
-			tranform = new Transformer<JSONObject>() { @Override public String transform(JSONObject o) {
-				return o.getString(displayExpression);
-			}};
-		}
+		String expr = displayExpression;
 		
 		for (Object object : data) {
-			JSONObject jsonObject = JSONObject.fromObject(object);
-			choices.put(JSONUtils.toJSON(object), tranform.transform(jsonObject));
+			String json;
+			try {
+				json = JSONUtils.toJSON(object);
+			}catch(JSONException e) {
+				json = object.toString();
+			}
+			choices.put(json, expr);
 		}
 		return choices;
 	}

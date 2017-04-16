@@ -15,7 +15,8 @@ import net.sf.json.JSONObject;
 
 public class AutoCompleteStringParameterDefinition extends StringParameterDefinition {
 	private static final long serialVersionUID = 2691768740499486855L;
-	private String labelField;
+	private String displayExpression;
+	private String valueExpression;
 	private AutocompleteDataProvider dataProvider;
 	private boolean allowUnrecognizedTokens;
 	
@@ -23,12 +24,14 @@ public class AutoCompleteStringParameterDefinition extends StringParameterDefini
 	public AutoCompleteStringParameterDefinition(String name, 
 			String defaultValue, 
 			String description, 
-			String labelField,
+			String displayExpression,
+			String valueExpression,
 			boolean allowUnrecognizedTokens,
 			AutocompleteDataProvider dataProvider) 
 	{
 		super(name, defaultValue, description);
-		this.labelField = labelField;
+		this.valueExpression = valueExpression;
+		this.displayExpression = displayExpression;
 		this.allowUnrecognizedTokens = allowUnrecognizedTokens;
 		this.dataProvider = dataProvider;
 	}
@@ -52,17 +55,32 @@ public class AutoCompleteStringParameterDefinition extends StringParameterDefini
 	}
 	
 	@Exported
-	public String getLabelField() {
-		return labelField;
+	public String getDisplayExpression() {
+		return displayExpression;
 	}
 		
-	public void setLabelField(String labelField) {
-		this.labelField = labelField;
+	@Exported
+	public void setDisplayExpression(String labelField) {
+		this.displayExpression = labelField;
 	}
 	
 	@Exported
-	public String getLabelFieldJsSafe() {
-		return labelField.replace("\"", "\\\"");
+	public String getValueExpression() {
+		return valueExpression;
+	}
+	
+	public void setValueExpression(String valueExpression) {
+		this.valueExpression = valueExpression;
+	}
+	
+	@Exported
+	public String getDisplayExpressionJsSafe() {
+		return Utils.normalizeExpression(displayExpression);
+	}
+	
+	@Exported
+	public String getValueExpressionJsSafe() {
+		return Utils.normalizeExpression(valueExpression);
 	}
 	
 	@Exported

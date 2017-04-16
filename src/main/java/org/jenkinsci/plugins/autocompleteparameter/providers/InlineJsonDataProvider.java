@@ -13,6 +13,7 @@ import hudson.util.FormValidation;
 
 public class InlineJsonDataProvider extends AutocompleteDataProvider {
 
+	private static final long serialVersionUID = 5282725458728513422L;
 	private String autoCompleteData;
 
 	@DataBoundConstructor
