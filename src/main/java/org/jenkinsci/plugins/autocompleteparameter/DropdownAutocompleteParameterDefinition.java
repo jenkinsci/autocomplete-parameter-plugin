@@ -85,7 +85,7 @@ public class DropdownAutocompleteParameterDefinition extends SimpleParameterDefi
 	public Map<String, String> getChoices() {
 		Collection<?> data = dataProvider.getData();
 		
-		LinkedHashMap<String, String> choices = new LinkedHashMap<String, String>();
+		LinkedHashMap<String, String> choices = new LinkedHashMap<>();
 		String expr = displayExpression;
 		
 		for (Object object : data) {

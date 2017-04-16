@@ -68,7 +68,8 @@ public class AutoCompleteStringParameterDefinition extends StringParameterDefini
 	public String getValueExpression() {
 		return valueExpression;
 	}
-	
+
+	@Exported
 	public void setValueExpression(String valueExpression) {
 		this.valueExpression = valueExpression;
 	}
