@@ -15,6 +15,9 @@
     <f:entry title="${%Display Expression}" field="displayExpression">
 		<f:textbox name="parameter.displayExpression" value="${instance.displayExpression}" />
 	</f:entry>
+	<f:entry title="${%Value Expression}" field="valueExpression">
+		<f:textbox name="parameter.valueExpression" value="${instance.valueExpression}" />
+	</f:entry>
 	<f:entry title="${%Default Value}">
 		<f:textbox name="parameter.defaultValue" value="${defaultValue.name}" />
 	</f:entry>

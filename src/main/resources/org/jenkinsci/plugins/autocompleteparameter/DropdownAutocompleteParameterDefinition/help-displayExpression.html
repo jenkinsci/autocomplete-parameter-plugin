@@ -1,14 +1,16 @@
 <div>
-<p>For data providers that returns JSON arrays, there are display and values. Display is the text the user will see when inserting tokens.
-Value is the value that will be given to the build.</p> 
+	<p>Value is the text the job will receive in the parameter. Use this field to control how the text will provided to the job</p>
 
-<p>This field allows you specify one the the json's field names, leave it empty (not recommended) to use the first field or write
-a javascript expression using the fields.</p>  
+	<ul>
+		<li>When this field is empty, the value will be whole value (the whole json)</li>
+		<li>Specify the JSON field name to choose a specific field</li>
+		<li>Write a javascript expression between {}'s and use the fields as if they were variables</li>
+	</ul>
 
-<p>If the dataset returns a simple list of strings, the value of this field is ignored.</p>
+	<p>If the data provider returns a simple list of strings, each value can be referred by the variable 'value' in javascript expressions</p>
 
-<p>Some examples. Let's assume the dataset resulted in the following json:</p>
-<pre>
+	<p>Some examples. Let's assume the data provider resulted in the following json:</p>
+	<pre>
 [
 	{"name": "Eddard Stark","id":"estark", "house":"Stark"},
 	{"name": "John Snow","id":"jsnow", "house":"Stark"},
@@ -17,7 +19,7 @@ a javascript expression using the fields.</p>
 ]
 </pre>
 
-Some valid examples:
+	Some valid examples:
 	<ul>
 		<li>name</li>
 		<li>house</li>

@@ -53,16 +53,14 @@ function createParameter($, element, displayExpression, valueExpression, autocom
 	displayExpression = displayExpression.trim();
     var engineValues = []; 
     autocompleteValues.forEach(function(v) {
-    	if (typeof v === 'object') {
-    		var l = JSON.stringify(v);
-    		if (displayExpression[0] == '{') 
-    			l = evaluateExpression(displayExpression, v, errorHandler);
-    		var value = evaluateExpression(valueExpression, v, errorHandler);
-    		
-    		engineValues.push({label: l, value: value});
+    	if (typeof v !== 'object') {
+    	    v = {value: v}
     	}
-    	else
-    		engineValues.push({label: v, value:v});
+        var l = JSON.stringify(v);
+        if (displayExpression[0] == '{')
+            l = evaluateExpression(displayExpression, v, errorHandler);
+        var value = evaluateExpression(valueExpression, v, errorHandler);
+        engineValues.push({label: l, value: value});
     })
 	var engine = new Bloodhound({
 	  local: engineValues,
