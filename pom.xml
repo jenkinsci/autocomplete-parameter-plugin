@@ -24,9 +24,9 @@
 	<url>https://wiki.jenkins-ci.org/display/JENKINS/Auto+Complete+Parameter+Plugin</url>
 
 	<scm>
-		<connection>scm:git:https://github.com/taksan/autocomplete-parameter-plugin.git</connection>
-		<developerConnection>scm:git:ssh://git@github.com/taksan/autocomplete-parameter-plugin.git</developerConnection>
-		<url>https://github.com/taksan/autocomplete-parameter-plugin/</url>
+		<connection>scm:git:https://github.com/taksan/autocomplete-parameter.git</connection>
+		<developerConnection>scm:git:ssh://git@github.com/taksan/autocomplete-parameter.git</developerConnection>
+		<url>https://github.com/taksan/autocomplete-parameter/</url>
 	</scm>
 
 
