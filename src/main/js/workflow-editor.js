@@ -49,7 +49,8 @@ jenkinsJSModules.import('ace-editor:ace-editor-122')
                     // enable autocompletion 
                     editor.setOptions({
                         enableBasicAutocompletion: true,
-                        enableLiveAutocompletion: false
+                        enableLiveAutocompletion: false,
+                        enableSnippets: false
                     });
     
                     editor.setValue(textarea.val(), 1);
