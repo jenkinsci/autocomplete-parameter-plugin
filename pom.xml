@@ -20,7 +20,7 @@
 	</properties>
 
 	<name>Autocomplete Parameter Plugin</name>
-	<description>This plugin introduces text fields that will autocomplete words based on a set of data</description>
+	<description>This plugin introduces fields that will autocomplete words based on a set of data</description>
 	<url>https://wiki.jenkins-ci.org/display/JENKINS/Auto+Complete+Parameter+Plugin</url>
 
 	<scm>
