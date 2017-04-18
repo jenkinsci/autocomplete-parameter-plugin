@@ -1,7 +1,6 @@
 function getFirstValue(obj) {
-	for (var i in obj) {
+	for (var i in obj)
 		return obj[i];
-	}
 }
 
 function evaluateExpression(expression, bindings, errorHandler)
@@ -28,8 +27,13 @@ function evaluateExpression(expression, bindings, errorHandler)
 function convertToChosen($, $element, displayExpression, valueExpression, errorHandler)
 {
 	$element.find("option").each(function(i, option) {
+		if (option.value == "") return;
 		var bindings;
 		try {
+		    if (option.value == "____java.lang.Exception____") {
+		        errorHandler(option.label)
+		        return;
+		    }
 			bindings = JSON.parse(option.value);
 		}catch(e) {
 			// value is not json, probably scalar value

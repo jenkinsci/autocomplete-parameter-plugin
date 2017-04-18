@@ -16,7 +16,7 @@ public abstract class AutocompleteDataProvider implements Describable<Autocomple
 	public abstract Collection<?> getData();
 	
 	public static DescriptorExtensionList<AutocompleteDataProvider, Descriptor<AutocompleteDataProvider>> all() {
-        return SafeJenkins.getInstanceOrCry().<AutocompleteDataProvider, Descriptor<AutocompleteDataProvider>>getDescriptorList(AutocompleteDataProvider.class);
+        return SafeJenkins.getInstanceOrCry().getDescriptorList(AutocompleteDataProvider.class);
     }
 	
 	@SuppressWarnings("unchecked")

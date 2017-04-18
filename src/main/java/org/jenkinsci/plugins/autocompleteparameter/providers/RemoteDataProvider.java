@@ -88,7 +88,6 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 		try {
 			URL url = new URL(uri);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.addRequestProperty("Accept-Encoding", "gzip,deflate");
 			conn.addRequestProperty("Accept", "*/*");
 			if (credentials != null) {
 				String auth = Base64.encodeBase64String((credentials.getUsername() + ":" + credentials.getPassword()).getBytes("UTF-8"));

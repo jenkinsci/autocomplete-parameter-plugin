@@ -83,19 +83,23 @@ public class DropdownAutocompleteParameterDefinition extends SimpleParameterDefi
 	
 	@Exported
 	public Map<String, String> getChoices() {
-		Collection<?> data = dataProvider.getData();
-		
 		LinkedHashMap<String, String> choices = new LinkedHashMap<>();
-		String expr = displayExpression;
-		
-		for (Object object : data) {
-			String json;
-			try {
-				json = JSONUtils.toJSON(object);
-			}catch(JSONException e) {
-				json = object.toString();
+		try {
+			Collection<?> data = dataProvider.getData();
+
+			String expr = displayExpression;
+
+			for (Object object : data) {
+				String json;
+				try {
+					json = JSONUtils.toJSON(object);
+				}catch(JSONException e) {
+					json = object.toString();
+				}
+				choices.put(json, expr);
 			}
-			choices.put(json, expr);
+		}catch(Exception e) {
+			choices.put("____java.lang.Exception____", "Data generation failure: " + e.getMessage());
 		}
 		return choices;
 	}
