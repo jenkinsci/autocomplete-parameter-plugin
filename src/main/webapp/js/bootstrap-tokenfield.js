@@ -871,10 +871,11 @@
 		  txt = this.$input.val();
 	  
       var fakeEl = $('<span>').hide().appendTo(document.body).text(txt).css({font: this.$input.css('font'), whiteSpace: "pre"})
-      var width = fakeEl.width() + 20;
+      var width = fakeEl.width() + 40;
       fakeEl.remove();
       
 	  this.$input.css('min-width', width+"px")
+	  this.$input.prev('.tt-hint').css("min-width",width+"px")
     }
 
   , focusInput: function (e) {
