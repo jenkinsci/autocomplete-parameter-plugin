@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.jenkinsci.plugins.autocompleteparameter.CredentialsUtils;
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
 import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
 import org.jenkinsci.plugins.autocompleteparameter.SafeJenkins;
@@ -100,6 +101,8 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
         Binding binding = new Binding();
         for (Entry<String, String> envVar : GlobalVariableUtils.getGlobalVariables().entrySet()) 
 			binding.setVariable(envVar.getKey(), envVar.getValue());
+        
+        binding.setVariable("credentialsUtils", new CredentialsUtils());
         
         Object out;
 		try {

@@ -6,6 +6,7 @@ import java.util.Collection;
 
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
+import org.jenkinsci.plugins.autocompleteparameter.CredentialsUtils;
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
 import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
 import org.kohsuke.stapler.AncestorInPath;
@@ -13,11 +14,8 @@ import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.export.Exported;
 
-import com.cloudbees.plugins.credentials.CredentialsMatchers;
-import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.common.StandardListBoxModel;
 import com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials;
-import com.cloudbees.plugins.credentials.domains.URIRequirementBuilder;
 
 import hudson.Extension;
 import hudson.model.Descriptor;
@@ -71,16 +69,7 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 	}
 	
 	private StandardUsernamePasswordCredentials lookupCredentials(String uri) {
-		if (credentialsId == null) 
-			return null;
-		return CredentialsMatchers.firstOrNull(
-				CredentialsProvider.lookupCredentials(
-						StandardUsernamePasswordCredentials.class,
-						(Item)null,
-						ACL.SYSTEM,
-						URIRequirementBuilder.fromUri(uri).build()),
-					CredentialsMatchers.withId(credentialsId)
-				);
+		return CredentialsUtils.lookupUsernamePasswordCredentials(uri, credentialsId);
 	}
 
 	private static String performRequest(String uri, StandardUsernamePasswordCredentials credentials) {

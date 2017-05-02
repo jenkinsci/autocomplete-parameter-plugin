@@ -4,11 +4,11 @@
 	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
 	
 	<f:entry title="${%Script}" field="script">
-	    <div class="workflow-editor-wrapper">
+	    <div class="parameter-groovy-editor-wrapper">
 	        <f:textarea value="${script}" checkMethod="post"/>
 	        <div class="pane-frame editor" style="height: 250px;"/>
 	    </div>
-	    <st:adjunct includes="org.jenkinsci.plugins.autocompleteparameter.workflow-editor"/>
+	    <st:adjunct includes="org.jenkinsci.plugins.autocompleteparameter.parameter-groovy-editor"/>
 	</f:entry>
   	<f:entry field="sandbox">
     	<f:checkbox title="${%Use Groovy Sandbox}" default="true"/>

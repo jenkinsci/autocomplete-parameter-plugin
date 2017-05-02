@@ -1,6 +1,6 @@
 var $ = require('jqueryui-detached').getJQueryUI();
 var jenkinsJSModules = require('jenkins-js-modules');
-var editorIdCounter = 0;
+var parameterGroovyEditorIdCounter = 0;
 
 // The Jenkins 'ace-editor:ace-editor-122' plugin doesn't support a synchronous 
 // require option. This is because of how the ACE editor is written. So, we need
@@ -9,7 +9,7 @@ var editorIdCounter = 0;
 jenkinsJSModules.import('ace-editor:ace-editor-122')
     .onFulfilled(function (acePack) {
         
-        $('.workflow-editor-wrapper').each(function() {
+        $('.parameter-groovy-editor-wrapper').each(function() {
             initEditor($(this));        
         });
         
@@ -21,8 +21,8 @@ jenkinsJSModules.import('ace-editor:ace-editor-122')
             
             // The ACE Editor js expects the container element to have an id.
             // We generate one and add it.
-            editorIdCounter++;
-            var editorId = 'workflow-editor-' + editorIdCounter;
+            parameterGroovyEditorIdCounter++;
+            var editorId = 'parameter-groovy-wrapper-' + parameterGroovyEditorIdCounter;
             aceContainer.attr('id', editorId);
             
             // The 'ace-editor:ace-editor-122' plugin supplies an "ACEPack" object.
