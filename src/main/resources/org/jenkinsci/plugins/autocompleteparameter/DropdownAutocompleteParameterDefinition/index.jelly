@@ -7,6 +7,7 @@
   	<script type="text/javascript">
   		$.noConflict();
   	</script>
+	<script src="${rootURL}/plugin/autocomplete-parameter/js/autocomplete-parameter.js"/>
 	<script src="${rootURL}/plugin/autocomplete-parameter/chosen/chosen.jquery.min.js"/>
 	<script src="${rootURL}/plugin/autocomplete-parameter/chosen/chosen.proto.min.js"/>
 	<link rel="stylesheet" type="text/css" href="${rootURL}/plugin/autocomplete-parameter/chosen/chosen.min.css" />
@@ -14,13 +15,13 @@
 	<f:entry title="${it.name}" description="${it.formattedDescription}">
 	<div name="parameter">
 		<input type="hidden" name="name" value="${it.name}" />
-        <select name="value" id="${it.name}_select">
-          <f:option/>
-          <j:forEach var="v" items="${it.choices.entrySet()}">
-            <f:option selected="${it.defaultValue==v.value}" value="${v.key}">${v.value}</f:option>
-          </j:forEach>
-        </select>
-        <span class='token-autocomplete-error' id="error_${it.name}"></span>
+		<select name="value" id="${it.name}_select">
+		  <f:option/>
+		  <j:forEach var="v" items="${it.choices.entrySet()}">
+			<f:option selected="${it.defaultValue==v.value}" value="${v.key}">${v.value}</f:option>
+		  </j:forEach>
+		</select>
+		<span class='token-autocomplete-error' id="error_${it.name}"></span>
 	</div>
 	</f:entry>
 	<script>
