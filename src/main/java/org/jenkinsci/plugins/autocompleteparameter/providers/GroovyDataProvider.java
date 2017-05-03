@@ -6,7 +6,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
-import org.jenkinsci.plugins.autocompleteparameter.CredentialsUtils;
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
 import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
 import org.jenkinsci.plugins.autocompleteparameter.RequestBuilder;

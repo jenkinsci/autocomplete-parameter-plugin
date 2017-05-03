@@ -1,11 +1,7 @@
 package org.jenkinsci.plugins.autocompleteparameter.providers;
 
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Collection;
 
-import org.apache.commons.io.IOUtils;
-import org.jenkinsci.plugins.autocompleteparameter.CredentialsUtils;
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
 import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
 import org.jenkinsci.plugins.autocompleteparameter.RequestBuilder;
