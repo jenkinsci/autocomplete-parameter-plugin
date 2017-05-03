@@ -8,6 +8,7 @@ import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.autocompleteparameter.CredentialsUtils;
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
 import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
+import org.jenkinsci.plugins.autocompleteparameter.RequestBuilder;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
@@ -65,16 +66,11 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 	}
 	
 	private static String performRequest(String uri, String credentialsId) {
-		uri = GlobalVariableUtils.resolveVariables(uri);
-		try {
-			URL url = new URL(uri);
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.addRequestProperty("Accept", "*/*");
-			CredentialsUtils.addAuth(uri,  credentialsId, conn);
-			return IOUtils.toString(conn.getInputStream(), "UTF-8");
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new IllegalStateException(e);
-		}
-	}	
+		return RequestBuilder
+				.url(GlobalVariableUtils.resolveVariables(uri))
+				.header("Accept", "*/*")
+				.credentials(credentialsId)
+				.get()
+				.content;
+	}
 }

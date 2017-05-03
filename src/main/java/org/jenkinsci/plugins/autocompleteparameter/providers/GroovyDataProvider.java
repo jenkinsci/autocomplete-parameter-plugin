@@ -118,6 +118,8 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
 		if (out instanceof Collection)
 			return (Collection<?>) out;
 
+		if (out instanceof String)
+			return JSONUtils.toCanonicalCollection(out.toString());
         
         throw new IllegalStateException("");
 	}	

@@ -14,11 +14,7 @@ import hudson.model.Item;
 import hudson.security.ACL;
 
 public class CredentialsUtils {
-	public static void addAuth(String credentialsId, HttpURLConnection conn) {
-		addAuth("", credentialsId, conn);
-	}
-
-	public static void addAuth(String uri, String credentialsId, HttpURLConnection conn) {
+	static void addAuth(String uri, String credentialsId, HttpURLConnection conn) {
 		StandardUsernamePasswordCredentials credentials = lookupUsernamePasswordCredentials(uri, credentialsId);
 		if (credentials != null) {
 			String auth;
