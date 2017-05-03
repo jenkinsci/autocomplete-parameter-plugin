@@ -96,6 +96,8 @@ public class DropdownAutocompleteParameterDefinition extends SimpleParameterDefi
 				}catch(JSONException e) {
 					json = object.toString();
 				}
+				if (expr.isEmpty())
+					expr = json;
 				choices.put(json, expr);
 			}
 		}catch(Exception e) {

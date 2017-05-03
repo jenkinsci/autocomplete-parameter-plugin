@@ -9,6 +9,7 @@ import java.util.Map.Entry;
 import org.jenkinsci.plugins.autocompleteparameter.CredentialsUtils;
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
 import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
+import org.jenkinsci.plugins.autocompleteparameter.RequestBuilder;
 import org.jenkinsci.plugins.autocompleteparameter.SafeJenkins;
 import org.jenkinsci.plugins.scriptsecurity.sandbox.groovy.SecureGroovyScript;
 import org.jenkinsci.plugins.scriptsecurity.scripts.ClasspathEntry;
@@ -102,7 +103,7 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
         for (Entry<String, String> envVar : GlobalVariableUtils.getGlobalVariables().entrySet()) 
 			binding.setVariable(envVar.getKey(), envVar.getValue());
         
-        binding.setVariable("credentialsUtils", new CredentialsUtils());
+        binding.setVariable("requestBuilder", new RequestBuilder());
         
         Object out;
 		try {

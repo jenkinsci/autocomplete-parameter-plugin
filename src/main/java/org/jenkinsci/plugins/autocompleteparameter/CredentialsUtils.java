@@ -1,5 +1,10 @@
 package org.jenkinsci.plugins.autocompleteparameter;
 
+import java.io.UnsupportedEncodingException;
+import java.net.HttpURLConnection;
+
+import org.apache.commons.codec.binary.Base64;
+
 import com.cloudbees.plugins.credentials.CredentialsMatchers;
 import com.cloudbees.plugins.credentials.CredentialsProvider;
 import com.cloudbees.plugins.credentials.common.StandardUsernamePasswordCredentials;
@@ -9,7 +14,24 @@ import hudson.model.Item;
 import hudson.security.ACL;
 
 public class CredentialsUtils {
-	public static StandardUsernamePasswordCredentials lookupUsernamePasswordCredentials(String uri, String credentialsId) {
+	public static void addAuth(String credentialsId, HttpURLConnection conn) {
+		addAuth("", credentialsId, conn);
+	}
+
+	public static void addAuth(String uri, String credentialsId, HttpURLConnection conn) {
+		StandardUsernamePasswordCredentials credentials = lookupUsernamePasswordCredentials(uri, credentialsId);
+		if (credentials != null) {
+			String auth;
+			try {
+				auth = Base64.encodeBase64String((credentials.getUsername() + ":" + credentials.getPassword()).getBytes("UTF-8"));
+				conn.addRequestProperty("Authorization", "Basic " + auth);
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+		}
+	}
+	
+	private static StandardUsernamePasswordCredentials lookupUsernamePasswordCredentials(String uri, String credentialsId) {
 		if (credentialsId == null) 
 			return null;
 		return CredentialsMatchers.firstOrNull(
@@ -20,9 +42,5 @@ public class CredentialsUtils {
 						URIRequirementBuilder.fromUri(uri).build()),
 					CredentialsMatchers.withId(credentialsId)
 				);
-	}
-	
-	public static StandardUsernamePasswordCredentials lookupUsernamePasswordCredentials(String credentialsId) {
-		return lookupUsernamePasswordCredentials("", credentialsId);
 	}
 }

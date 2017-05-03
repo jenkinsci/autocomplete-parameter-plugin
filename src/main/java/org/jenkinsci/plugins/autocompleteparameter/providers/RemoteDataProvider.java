@@ -4,7 +4,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Collection;
 
-import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.io.IOUtils;
 import org.jenkinsci.plugins.autocompleteparameter.CredentialsUtils;
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
@@ -37,10 +36,7 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 
 	@Override
 	public Collection<?> getData() {
-		StandardUsernamePasswordCredentials credentials = lookupCredentials(autoCompleteUrl);
-		String response = performRequest(autoCompleteUrl, credentials);
-		
-		return JSONUtils.toCanonicalCollection(response);
+		return JSONUtils.toCanonicalCollection(performRequest(autoCompleteUrl, credentialsId));
 	}
 
 	@Exported
@@ -68,20 +64,13 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
         }
 	}
 	
-	private StandardUsernamePasswordCredentials lookupCredentials(String uri) {
-		return CredentialsUtils.lookupUsernamePasswordCredentials(uri, credentialsId);
-	}
-
-	private static String performRequest(String uri, StandardUsernamePasswordCredentials credentials) {
+	private static String performRequest(String uri, String credentialsId) {
 		uri = GlobalVariableUtils.resolveVariables(uri);
 		try {
 			URL url = new URL(uri);
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.addRequestProperty("Accept", "*/*");
-			if (credentials != null) {
-				String auth = Base64.encodeBase64String((credentials.getUsername() + ":" + credentials.getPassword()).getBytes("UTF-8"));
-				conn.addRequestProperty("Authorization", "Basic " + auth);
-			}
+			CredentialsUtils.addAuth(uri,  credentialsId, conn);
 			return IOUtils.toString(conn.getInputStream(), "UTF-8");
 		} catch (Exception e) {
 			e.printStackTrace();
