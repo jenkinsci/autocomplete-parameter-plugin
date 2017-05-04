@@ -82,7 +82,7 @@ public class RequestBuilder {
 			
 			if (!StringUtils.isEmpty(body)) {
 				conn.setDoOutput(true);
-				writer = new OutputStreamWriter(conn.getOutputStream());
+				writer = new OutputStreamWriter(conn.getOutputStream(),"UTF-8");
 				writer.write(body);
 				writer.flush();
 			}
@@ -91,7 +91,7 @@ public class RequestBuilder {
 			String content;
 			
 			try {
-				content = IOUtils.toString(conn.getInputStream());
+				content = IOUtils.toString(conn.getInputStream(), "UTF-8");
 			}catch(IOException e) {
 				content = e.getMessage();
 			}
