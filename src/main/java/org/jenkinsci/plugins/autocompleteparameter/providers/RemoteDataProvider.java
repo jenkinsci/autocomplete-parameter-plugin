@@ -17,7 +17,7 @@ import hudson.model.Descriptor;
 import hudson.model.Item;
 import hudson.security.ACL;
 import hudson.util.ListBoxModel;
-import taksan.commons.RequestBuilder;
+import wirelabs.commons.RequestBuilder;
 
 public class RemoteDataProvider extends AutocompleteDataProvider {
 	private static final long serialVersionUID = 5773462762109544336L;
@@ -64,7 +64,7 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 	private static String performRequest(String uri, String credentialsId) {
 		return RequestBuilder
 				.url(GlobalVariableUtils.resolveVariables(uri))
-				.enableCache()
+				.cache()
 				.header("Accept", "*/*")
 				.credentials(credentialsId)
 				.get()

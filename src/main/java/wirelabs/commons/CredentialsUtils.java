@@ -1,4 +1,4 @@
-package taksan.commons;
+package wirelabs.commons;
 
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;

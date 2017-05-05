@@ -1,11 +1,11 @@
-package taksan.commons;
+package wirelabs.commons;
 
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
-import taksan.commons.ExpirableCache;
-import taksan.commons.ExpirableCacheRepopulator;
+import wirelabs.commons.ExpirableCache;
+import wirelabs.commons.ExpirableCacheRepopulator;
 
 public class ExpirableCacheTest {
 	@Test

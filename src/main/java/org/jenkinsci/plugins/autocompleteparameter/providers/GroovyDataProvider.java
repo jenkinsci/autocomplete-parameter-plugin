@@ -20,7 +20,7 @@ import groovy.lang.Binding;
 import hudson.Extension;
 import hudson.model.Descriptor;
 import hudson.util.FormValidation;
-import taksan.commons.RequestBuilder;
+import wirelabs.commons.RequestBuilder;
 
 public class GroovyDataProvider extends AutocompleteDataProvider {
 	private static final long serialVersionUID = -6438474876305562245L;
