@@ -1,5 +1,6 @@
-package org.jenkinsci.plugins.autocompleteparameter;
+package taksan.commons;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -8,8 +9,8 @@ import org.apache.commons.collections.map.UnmodifiableMap;
 import net.sf.json.JSON;
 import net.sf.json.JSONSerializer;
 
-public class RequestResponse {
-
+public class RequestResponse implements Serializable {
+	private static final long serialVersionUID = -9121943094727486673L;
 	public final int responseCode;
 	public final String content;
 	public final Map<String, List<String>> headers;

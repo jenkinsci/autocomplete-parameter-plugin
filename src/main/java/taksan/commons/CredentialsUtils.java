@@ -1,4 +1,4 @@
-package org.jenkinsci.plugins.autocompleteparameter;
+package taksan.commons;
 
 import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;

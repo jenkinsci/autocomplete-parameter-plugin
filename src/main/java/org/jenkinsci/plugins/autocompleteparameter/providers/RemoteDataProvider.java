@@ -4,7 +4,6 @@ import java.util.Collection;
 
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
 import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
-import org.jenkinsci.plugins.autocompleteparameter.RequestBuilder;
 import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
@@ -18,6 +17,7 @@ import hudson.model.Descriptor;
 import hudson.model.Item;
 import hudson.security.ACL;
 import hudson.util.ListBoxModel;
+import taksan.commons.RequestBuilder;
 
 public class RemoteDataProvider extends AutocompleteDataProvider {
 	private static final long serialVersionUID = 5773462762109544336L;
@@ -64,6 +64,7 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 	private static String performRequest(String uri, String credentialsId) {
 		return RequestBuilder
 				.url(GlobalVariableUtils.resolveVariables(uri))
+				.enableCache()
 				.header("Accept", "*/*")
 				.credentials(credentialsId)
 				.get()
