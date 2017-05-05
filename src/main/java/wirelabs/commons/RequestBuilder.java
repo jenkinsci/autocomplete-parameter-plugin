@@ -2,6 +2,7 @@ package wirelabs.commons;
 
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.MessageDigest;
@@ -183,8 +184,8 @@ public class RequestBuilder {
 
 	private String md5OrCry()  {
 		try {
-			return new String(MessageDigest.getInstance("MD5").digest(signatureContent.toString().getBytes()));
-		} catch (NoSuchAlgorithmException e) {
+			return new String(MessageDigest.getInstance("MD5").digest(signatureContent.toString().getBytes("UTF-8")), "UTF-8");
+		} catch (NoSuchAlgorithmException|UnsupportedEncodingException e) {
 			throw new IllegalStateException(e);
 		}
 	}
