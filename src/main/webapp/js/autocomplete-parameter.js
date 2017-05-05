@@ -43,7 +43,20 @@ function convertToChosen($, $element, displayExpression, valueExpression, errorH
 		option.innerHTML = evaluateExpression(displayExpression, bindings, errorHandler);
 		option.value = evaluateExpression(valueExpression, bindings, errorHandler);		
 	});
+
+	var allOptions = $element.find("option")
+    var selected = $element.val();
+
+    allOptions.sort(function(a,b) {
+        if (a.text > b.text) return 1;
+        if (a.text < b.text) return -1;
+        return 0
+    })
+
+    $element.empty().append( allOptions );
+    $element.val(selected);
 	$element.chosen();
+
 	$('.chosen-container').css({"min-width": "200px"});	
 }
 
