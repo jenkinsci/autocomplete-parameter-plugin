@@ -6,6 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
 import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
 import org.jenkinsci.plugins.autocompleteparameter.SafeJenkins;
@@ -41,7 +42,12 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
 	public Collection<?> getData() {
        return runScript(script, sandbox, classpath);
 	}
-	
+
+	@Override
+	public Collection<?> filter(String query) {
+		throw new NotImplementedException("Filter not implemented for " + getClass().getSimpleName());
+	}
+
 	public String getScript() {
 		return script;
 	}

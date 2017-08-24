@@ -1,9 +1,15 @@
+# Build
 target
-.classpath
-.project
-.settings
 work
 node_modules
 node
+drivers
+
+# Eclipse
+.classpath
+.project
+.settings
+
+# IntelliJ
 .idea
 *.iml

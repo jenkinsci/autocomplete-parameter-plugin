@@ -3,6 +3,7 @@ package org.jenkinsci.plugins.autocompleteparameter.providers;
 import java.io.Serializable;
 import java.util.Collection;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.jenkinsci.plugins.autocompleteparameter.SafeJenkins;
 
 import hudson.DescriptorExtensionList;
@@ -14,7 +15,13 @@ import hudson.model.Descriptor;
 public abstract class AutocompleteDataProvider implements Describable<AutocompleteDataProvider>, ExtensionPoint, Serializable {
 
 	public abstract Collection<?> getData();
-	
+
+	public boolean isPrefetch() {
+		return true;
+	}
+
+	public abstract Collection<?> filter(String query);
+
 	public static DescriptorExtensionList<AutocompleteDataProvider, Descriptor<AutocompleteDataProvider>> all() {
         return SafeJenkins.getInstanceOrCry().getDescriptorList(AutocompleteDataProvider.class);
     }

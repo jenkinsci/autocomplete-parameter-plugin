@@ -5,6 +5,7 @@ import java.util.List;
 import org.jenkinsci.plugins.autocompleteparameter.providers.AutocompleteDataProvider;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.StaplerRequest;
+import org.kohsuke.stapler.bind.JavaScriptMethod;
 import org.kohsuke.stapler.export.Exported;
 
 import hudson.Extension;
@@ -19,7 +20,7 @@ public class AutoCompleteStringParameterDefinition extends StringParameterDefini
 	private String valueExpression;
 	private AutocompleteDataProvider dataProvider;
 	private boolean allowUnrecognizedTokens;
-	
+
 	@DataBoundConstructor
 	public AutoCompleteStringParameterDefinition(String name, 
 			String defaultValue, 
@@ -27,7 +28,7 @@ public class AutoCompleteStringParameterDefinition extends StringParameterDefini
 			String displayExpression,
 			String valueExpression,
 			boolean allowUnrecognizedTokens,
-			AutocompleteDataProvider dataProvider) 
+			AutocompleteDataProvider dataProvider)
 	{
 		super(name, defaultValue, description);
 		this.valueExpression = valueExpression;
@@ -86,8 +87,26 @@ public class AutoCompleteStringParameterDefinition extends StringParameterDefini
 	
 	@Exported
 	public String getAutoCompleteValuesScript() {
+		if(isPrefetch()) {
+			try {
+				return JSONUtils.toJSON(dataProvider.getData());
+			} catch (Exception e) {
+				return "'ERROR: Autocomplete data generation failure: " + e.getMessage() + "'";
+			}
+		} else {
+			return "[]";
+		}
+	}
+
+	@Exported
+	public boolean isPrefetch() {
+		return dataProvider.isPrefetch();
+	}
+
+	@JavaScriptMethod
+	public String filterAutoCompleteValues(String query) {
 		try {
-			return JSONUtils.toJSON(dataProvider.getData());
+			return JSONUtils.toJSON(dataProvider.filter(query));
 		}catch(Exception e) {
 			return "'ERROR: Autocomplete data generation failure: " + e.getMessage()+"'";
 		}
