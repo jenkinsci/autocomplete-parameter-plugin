@@ -2,7 +2,21 @@
 <j:jelly xmlns:j="jelly:core" xmlns:st="jelly:stapler" xmlns:d="jelly:define"
 	xmlns:l="/lib/layout" xmlns:t="/lib/hudson" xmlns:f="/lib/form"
 	xmlns:i="jelly:fmt" xmlns:p="/lib/hudson/project">
-    
+
+	<style type="text/css">
+		.validation-error-area .observation {
+			font-size: 11px;
+			padding: 5px;
+			border-style: solid;
+			border-width: 1px;
+			border-color: Moccasin;
+			background-color: LightYellow;
+		}
+	</style>
+
+	<f:entry field="prefetch">
+		<f:checkbox title="${%Prefetch Results}" default="true"/>
+	</f:entry>
     <f:entry title="${%URL}" field="autoCompleteUrl">
 		<f:textbox name="parameter.autoCompleteUrl" value="${instance.autoCompleteUrl}" />
 	</f:entry>

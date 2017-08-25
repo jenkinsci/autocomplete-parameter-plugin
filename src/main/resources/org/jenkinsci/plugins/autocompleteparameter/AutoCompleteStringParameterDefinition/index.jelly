@@ -12,7 +12,13 @@
 	<script src="${rootURL}/plugin/autocomplete-parameter/js/autocomplete-parameter.js"/>
 	<link rel="stylesheet" type="text/css" href="${rootURL}/plugin/autocomplete-parameter/css/bootstrap-tokenfield.css" />
 	<link rel="stylesheet" type="text/css" href="${rootURL}/plugin/autocomplete-parameter/css/tokenfield-typeahead.css" />
-  
+
+	<style type="text/css">
+		.dotted-error {
+			text-decoration: underline dotted red;
+		}
+	</style>
+
 	<f:entry title="${it.name}" description="${it.formattedDescription}">
 		<div name="parameter">
 			<input type="hidden" name="name" value="${it.name}" />
@@ -21,11 +27,13 @@
 		
 	  	<script type="text/javascript">
 	  		jQuery( document ).ready(function( $$ ) {
-	  			createParameter($$, $$("#autocomplete-${it.name}"), 
+	  			createParameter($$, $$("#autocomplete-${it.name}"),
 		  			${it.displayExpressionJsSafe}, 
 		  			${it.valueExpressionJsSafe}, 
 		  			${it.autoCompleteValuesScript},
-		  			${it.allowUnrecognizedTokens}, 
+		  			${it.allowUnrecognizedTokens},
+		  			${it.prefetch},
+		  			<st:bind value="${it}"/>,
 		  			function(error) {
 		  				$$("#error_${it.name}").html(error);
 		  			});

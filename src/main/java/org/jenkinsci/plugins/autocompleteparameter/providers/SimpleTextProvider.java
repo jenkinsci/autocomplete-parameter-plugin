@@ -3,6 +3,7 @@ package org.jenkinsci.plugins.autocompleteparameter.providers;
 import java.util.Arrays;
 import java.util.Collection;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.kohsuke.stapler.DataBoundConstructor;
 
 import hudson.Extension;
@@ -21,7 +22,12 @@ public class SimpleTextProvider extends AutocompleteDataProvider {
 	public Collection<?> getData() {
 		return Arrays.asList(autoCompleteData.split("\n"));
 	}
-	
+
+	@Override
+	public Collection<?> filter(String query) {
+		throw new NotImplementedException("Filter not implemented for " + getClass().getSimpleName());
+	}
+
 	public String getAutoCompleteData() {
 		return autoCompleteData;
 	}

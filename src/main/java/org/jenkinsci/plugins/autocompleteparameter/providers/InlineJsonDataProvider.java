@@ -3,6 +3,7 @@ package org.jenkinsci.plugins.autocompleteparameter.providers;
 import java.util.Collection;
 import java.util.Collections;
 
+import org.apache.commons.lang.NotImplementedException;
 import org.jenkinsci.plugins.autocompleteparameter.JSONUtils;
 import org.kohsuke.stapler.DataBoundConstructor;
 import org.kohsuke.stapler.QueryParameter;
@@ -27,6 +28,11 @@ public class InlineJsonDataProvider extends AutocompleteDataProvider {
 			return Collections.emptyList();
 		
 		return JSONUtils.toCanonicalCollection(autoCompleteData);
+	}
+
+	@Override
+	public Collection<?> filter(String query) {
+		throw new NotImplementedException("Filter not implemented for " + getClass().getSimpleName());
 	}
 
 	@Extension

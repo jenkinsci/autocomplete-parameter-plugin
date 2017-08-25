@@ -46,7 +46,7 @@ public class RemoteDataProviderTest {
 		});
 		t.start();
 		latch.await();
-		RemoteDataProvider subject = new RemoteDataProvider("http://localhost:11331/test", null);
+		RemoteDataProvider subject = new RemoteDataProvider(true, "http://localhost:11331/test", null);
 		@SuppressWarnings("unchecked")
 		Collection<MorphDynaBean> actual = (Collection<MorphDynaBean>) subject.getData();
 		Iterator<MorphDynaBean> it = actual.iterator();
