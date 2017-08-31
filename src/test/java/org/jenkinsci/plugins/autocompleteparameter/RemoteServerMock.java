@@ -19,7 +19,7 @@ public class RemoteServerMock implements Closeable {
     private HttpServer server;
 
     public RemoteServerMock() {
-        server = ServerBootstrap.bootstrap().setListenerPort(29971)
+        server = ServerBootstrap.bootstrap()
                 .registerHandler("/rest/users", new HttpRequestHandler() {
                     @Override
                     public void handle(HttpRequest request, HttpResponse response, HttpContext context) throws HttpException, IOException {
@@ -35,6 +35,10 @@ public class RemoteServerMock implements Closeable {
                     }
                 })
                 .create();
+    }
+
+    public String getAddress() {
+        return "http://localhost:" + server.getLocalPort();
     }
 
     public void start() throws IOException {

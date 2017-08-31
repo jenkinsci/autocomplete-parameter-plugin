@@ -3,9 +3,6 @@ package org.jenkinsci.plugins.autocompleteparameter;
 import hudson.model.FreeStyleProject;
 import hudson.model.ParametersDefinitionProperty;
 import hudson.model.Project;
-import org.hamcrest.BaseMatcher;
-import org.hamcrest.Description;
-import org.hamcrest.Matcher;
 import org.jenkinsci.plugins.autocompleteparameter.pages.BuildWithParametersPage;
 import org.jenkinsci.plugins.autocompleteparameter.pages.BuildWithParametersPage.AutoCompleteParameter;
 import org.jenkinsci.plugins.autocompleteparameter.pages.Pages;
@@ -15,24 +12,25 @@ import org.jenkinsci.plugins.autocompleteparameter.providers.RemoteDataProvider;
 import org.jenkinsci.plugins.autocompleteparameter.providers.SimpleTextProvider;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.xml.sax.SAXException;
 
 import java.io.IOException;
 
 import static org.hamcrest.Matchers.containsString;
 import static org.hamcrest.Matchers.equalTo;
+import static org.jenkinsci.plugins.autocompleteparameter.SeleniumMatchers.isVisible;
 import static org.junit.Assert.assertThat;
 
 public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
 
-    public Project setupJobWithRemoteDataProvider() throws IOException {
+    public Project setupJobWithRemoteDataProvider(RemoteServerMock server) throws IOException {
+        String endpoint = server.getAddress() + "/rest/users";
+        String slowEndpoint = server.getAddress() + "/rest/users?slow=true";
         FreeStyleProject project = j.createFreeStyleProject("remote");
         AutoCompleteStringParameterDefinition prefetchedParameter = new AutoCompleteStringParameterDefinition("user", "", "", "name", "email", false
-                , new RemoteDataProvider(true, "http://localhost:29971/rest/users", "credentials"));
+                , new RemoteDataProvider(true, endpoint, "credentials"));
         AutoCompleteStringParameterDefinition asyncParameter = new AutoCompleteStringParameterDefinition("other", "", "", "name", "email", false
-                , new RemoteDataProvider(false, "http://localhost:29971/rest/users?slow=true", "credentials"));
+                , new RemoteDataProvider(false, slowEndpoint, "credentials"));
         project.addProperty(new ParametersDefinitionProperty(
                 prefetchedParameter, asyncParameter
         ));
@@ -87,9 +85,9 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
 
     @Test
     public void remoteDataProvider() throws IOException, SAXException, InterruptedException {
-        Project project = setupJobWithRemoteDataProvider();
         try(RemoteServerMock server = remoteServer()) {
             server.start();
+            Project project = setupJobWithRemoteDataProvider(server);
 
             BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(this, project);
             String html = webDriver.getPageSource();
@@ -98,14 +96,14 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
             assertThat(html, containsString("Mozart"));
 
             // test prefetch autocomplete
-            AutoCompleteParameter user = buildWithParametersPage.getParameter("user");
+            AutoCompleteParameter user = buildWithParametersPage.getAutoComplete("user");
             user.sendKeys("Wolfg");
             assertThat(user.getSuggestionsBox(), isVisible());
             user.sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
             assertThat(user.getValue(), equalTo("mozart@mail.com"));
 
             // test async autocomplete
-            AutoCompleteParameter other = buildWithParametersPage.getParameter("other");
+            AutoCompleteParameter other = buildWithParametersPage.getAutoComplete("other");
             other.sendKeys("Fred");
             doWait().until(other.loadingIconVisible());
             assertThat(other.getLoadingIcon(), isVisible());
@@ -126,7 +124,7 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
         assertThat(html, containsString("Eight"));
         assertThat(html, containsString("Thirteen"));
 
-        AutoCompleteParameter fibonacci = buildWithParametersPage.getParameter("fibonacci");
+        AutoCompleteParameter fibonacci = buildWithParametersPage.getAutoComplete("fibonacci");
         fibonacci.sendKeys("On").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
         fibonacci.sendKeys("Tw").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
         fibonacci.sendKeys("Th").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
@@ -146,7 +144,7 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
         assertThat(html, containsString("Lannister"));
         assertThat(html, containsString("Baratheon"));
 
-        AutoCompleteParameter characters = buildWithParametersPage.getParameter("characters");
+        AutoCompleteParameter characters = buildWithParametersPage.getAutoComplete("characters");
         characters.sendKeys("rob").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
         characters.sendKeys("edd").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
         characters.sendKeys("sno").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
@@ -169,31 +167,12 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
         assertThat(html, containsString("Gates"));
         assertThat(html, containsString("Torvalds"));
 
-        AutoCompleteParameter hackers = buildWithParametersPage.getParameter("hackers");
+        AutoCompleteParameter hackers = buildWithParametersPage.getAutoComplete("hackers");
         hackers.sendKeys("jobs").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
         hackers.sendKeys("bill").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
         hackers.sendKeys("ada").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
         hackers.sendKeys("linus").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
 
         assertThat(hackers.getValue(), equalTo("sj, bg, al, lt"));
-    }
-
-    private Matcher<? super WebElement> isVisible() {
-        return new BaseMatcher<WebElement>() {
-            @Override
-            public void describeTo(Description description) {
-                description.appendText("WebElement is not visible");
-            }
-
-            @Override
-            public boolean matches(Object item) {
-                WebElement element = (WebElement) item;
-                return element.isDisplayed();
-            }
-        };
-    }
-
-    private WebDriverWait doWait() {
-        return new WebDriverWait(webDriver, 30);
     }
 }
