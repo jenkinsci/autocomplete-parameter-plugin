@@ -1,11 +1,12 @@
 package org.jenkinsci.plugins.autocompleteparameter;
 
-import org.junit.After;
-import org.junit.Before;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
 import org.junit.Rule;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 
@@ -14,13 +15,12 @@ public abstract class AbstractUiIT {
     @Rule
     public JenkinsRule j = new JenkinsRule();
 
-    public WebDriver webDriver;
+    public static WebDriver webDriver;
 
-    @Before
-    public void openBrowser() {
+    @BeforeClass
+    public static void openBrowser() {
         if (System.getProperty("webdriver.gecko.driver") == null)
             System.setProperty("webdriver.gecko.driver", "drivers/linux/marionette/64bit/geckodriver");
-
 
         if (!new File("drivers/linux/marionette/64bit/geckodriver").exists())
             throw new IllegalStateException("To run integration tests, you must run 'mvn clean install' at least once to download gecko driver");
@@ -28,8 +28,8 @@ public abstract class AbstractUiIT {
         webDriver = new FirefoxDriver();
     }
 
-    @After
-    public void closeBrowser() {
+    @AfterClass
+    public static void closeBrowser() {
         if (webDriver == null)
             return;
 
@@ -43,5 +43,9 @@ public abstract class AbstractUiIT {
         } catch (Exception e) {
 //            e.printStackTrace();
         }
+    }
+
+    protected WebDriverWait doWait() {
+        return new WebDriverWait(webDriver, 30);
     }
 }
