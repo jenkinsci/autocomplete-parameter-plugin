@@ -30,6 +30,14 @@ public class InlineJsonDataProvider extends AutocompleteDataProvider {
 		return JSONUtils.toCanonicalCollection(autoCompleteData);
 	}
 
+	public String getAutoCompleteData() {
+		return autoCompleteData;
+	}
+
+	public void setAutoCompleteData(String autoCompleteData) {
+		this.autoCompleteData = autoCompleteData;
+	}
+
 	@Override
 	public Collection<?> filter(String query) {
 		throw new NotImplementedException("Filter not implemented for " + getClass().getSimpleName());
