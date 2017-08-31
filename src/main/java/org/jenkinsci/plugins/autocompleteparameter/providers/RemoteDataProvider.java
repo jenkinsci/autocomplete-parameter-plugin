@@ -55,9 +55,12 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
+		String replaced = StrSubstitutor.replace(autoCompleteUrl, parameters);
+		if(autoCompleteUrl.equals(replaced))
+			replaced = autoCompleteUrl + query;
 		return JSONUtils.toCanonicalCollection(
 				performRequest(
-						StrSubstitutor.replace(autoCompleteUrl, parameters)
+						replaced
 						, credentialsId
 				)
 		);
