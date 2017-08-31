@@ -89,7 +89,7 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 			if(StringUtils.isEmpty(value))
 				return FormValidation.error("Invalid URL");
 			try {
-				new URL(value);
+				new URL(GlobalVariableUtils.resolveVariables(value));
 			} catch (MalformedURLException e) {
 				return FormValidation.error("Invalid URL: " + e.getMessage());
 			}

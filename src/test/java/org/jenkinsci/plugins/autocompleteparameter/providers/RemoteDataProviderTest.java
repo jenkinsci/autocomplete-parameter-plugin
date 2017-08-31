@@ -6,6 +6,7 @@ import java.util.Iterator;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.TimeUnit;
 
+import hudson.util.FormValidation;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -18,6 +19,9 @@ import hidden.jth.org.apache.http.impl.bootstrap.ServerBootstrap;
 import hidden.jth.org.apache.http.protocol.HttpContext;
 import hidden.jth.org.apache.http.protocol.HttpRequestHandler;
 import net.sf.ezmorph.bean.MorphDynaBean;
+
+import static org.hamcrest.Matchers.*;
+import static org.junit.Assert.assertThat;
 
 public class RemoteDataProviderTest {
 	@Test
@@ -58,5 +62,28 @@ public class RemoteDataProviderTest {
 		MorphDynaBean actual2 = it.next();
 		Assert.assertEquals("Robert", actual2.get("name"));
 		Assert.assertEquals("Baratheon", actual2.get("house"));
+	}
+
+	@Test
+	public void urlValidation_empty() {
+		RemoteDataProvider.DescriptorImpl subject = new RemoteDataProvider.DescriptorImpl();
+		FormValidation response = subject.doCheckAutoCompleteUrl(true, "");
+		assertThat(response.kind, is(FormValidation.Kind.ERROR));
+	}
+
+	@Test
+	public void urlValidation_async_withoutQueryParameter() {
+		RemoteDataProvider.DescriptorImpl subject = new RemoteDataProvider.DescriptorImpl();
+		FormValidation response = subject.doCheckAutoCompleteUrl(false, "http://remote/rest");
+		assertThat(response.kind, is(FormValidation.Kind.OK));
+		assertThat(response.renderHtml(), containsString("${query}"));
+	}
+
+	@Test
+	public void urlValidation_async_withQueryParameter() {
+		RemoteDataProvider.DescriptorImpl subject = new RemoteDataProvider.DescriptorImpl();
+		FormValidation response = subject.doCheckAutoCompleteUrl(false, "http://remote/rest?q=${query}");
+		assertThat(response.kind, equalTo(FormValidation.Kind.OK));
+		assertThat(response.renderHtml(), not(containsString("${query}")));
 	}
 }
