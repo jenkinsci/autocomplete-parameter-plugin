@@ -21,4 +21,15 @@ public final class Pages {
         return page;
     }
 
+    public static JobConfigurationPage openJobConfiguration(AbstractUiIT test, Project project) throws IOException {
+        WebDriver webDriver = test.webDriver;
+        JenkinsRule j = test.j;
+
+        webDriver.get(j.getURL().toString() + "job/" + project.getName() + "/configure");
+
+        JobConfigurationPage page = new JobConfigurationPage(webDriver, project);
+        PageFactory.initElements(webDriver, page);
+        return page;
+    }
+
 }
