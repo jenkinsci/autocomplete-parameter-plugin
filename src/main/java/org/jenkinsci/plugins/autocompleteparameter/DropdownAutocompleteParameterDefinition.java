@@ -1,6 +1,7 @@
 package org.jenkinsci.plugins.autocompleteparameter;
 
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 import org.jenkinsci.plugins.autocompleteparameter.providers.AutocompleteDataProvider;
 import org.kohsuke.stapler.DataBoundConstructor;
@@ -82,7 +83,7 @@ public class DropdownAutocompleteParameterDefinition extends SimpleParameterDefi
 	public String getAutoCompleteValuesScript() {
 		if(isPrefetch()) {
 			try {
-				return JSONUtils.toJSON(dataProvider.getData());
+				return JSONUtils.toJSON(dataProvider.getData(2, TimeUnit.MINUTES));
 			} catch (Exception e) {
 				return "'ERROR: Autocomplete data generation failure: " + e.getMessage() + "'";
 			}
@@ -99,7 +100,7 @@ public class DropdownAutocompleteParameterDefinition extends SimpleParameterDefi
     @JavaScriptMethod
     public String filterAutoCompleteValues(String query) {
         try {
-            return JSONUtils.toJSON(dataProvider.filter(query));
+            return JSONUtils.toJSON(dataProvider.filter(query, 30, TimeUnit.SECONDS));
         } catch (Exception e) {
             return "'ERROR: Dropdown data generation failure: " + e.getMessage() + "'";
         }

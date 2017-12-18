@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map.Entry;
+import java.util.concurrent.Callable;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang.NotImplementedException;
 import org.jenkinsci.plugins.autocompleteparameter.GlobalVariableUtils;
@@ -79,11 +81,17 @@ public class GroovyDataProvider extends AutocompleteDataProvider {
 			return "Groovy script";
 		}
 		
-        public FormValidation doTest(StaplerRequest req, @QueryParameter String script, @QueryParameter boolean sandbox, LinkedList<ClasspathEntry> classpath)
+        public FormValidation doTest(StaplerRequest req, @QueryParameter final String script, @QueryParameter final boolean sandbox, final LinkedList<ClasspathEntry> classpath)
         {
             try
             {
-            	return FormValidation.ok(JSONUtils.toJSON(runScript(script, sandbox, classpath)));
+            	return FormValidation.ok(JSONUtils.toJSON(
+            			executeWithTimeout(new Callable<Collection<?>>() {
+							@Override
+							public Collection<?> call() throws Exception {
+								return runScript(script, sandbox, classpath);
+							}
+						}, 2, TimeUnit.MINUTES)));
             }
             catch(Exception e)
             {
