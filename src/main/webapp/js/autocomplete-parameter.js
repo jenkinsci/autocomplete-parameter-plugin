@@ -10,8 +10,8 @@ function evaluateExpression(expression, bindings, errorHandler)
         var script = [];
         script.push("(function(){");
         for (var key in v) {
-            var value=v[key];
-            script.push("var " + key+"='"+value.replace(/'/g,"\\'")+"';");
+            var value=v[key].toString().replace(/'/g,"\\'");
+            script.push("var " + key+"='"+value+"';");
         }
         var expr = expression.substr(1,expression.length-2);
         if (expr.trim().length == 0) {

@@ -38,9 +38,40 @@ public class RemoteDataProviderTest {
 				.create();
 		server.start();
 		try {
-			RemoteDataProvider subject = new RemoteDataProvider(true, "http://localhost:11331/test", null);
+			RemoteDataProvider subject = new RemoteDataProvider(true, "http://localhost:11331/test", null, "");
 			@SuppressWarnings("unchecked")
 			Collection<MorphDynaBean> actual = (Collection<MorphDynaBean>) subject.getData();
+			Iterator<MorphDynaBean> it = actual.iterator();
+
+			MorphDynaBean actual1 = it.next();
+			Assert.assertEquals("Eddard", actual1.get("name"));
+			Assert.assertEquals("Stark", actual1.get("house"));
+
+			MorphDynaBean actual2 = it.next();
+			Assert.assertEquals("Robert", actual2.get("name"));
+			Assert.assertEquals("Baratheon", actual2.get("house"));
+		} finally {
+			server.stop();
+		}
+	}
+
+	@Test
+	public void happyDayFilter() throws Exception {
+		HttpServer server = ServerBootstrap.bootstrap().setListenerPort(11331)
+				.registerHandler("/test/query=smth", new HttpRequestHandler() {
+					@Override
+					public void handle(HttpRequest arg0, HttpResponse response, HttpContext arg2) throws IOException {
+						response.setEntity(new StringEntity("{'start': 1, 'entries': [{'name':'Eddard'," +
+								"'house':'Stark'}, {'name':'Robert','house':'Baratheon'}]}"));
+						response.setStatusCode(200);
+					}
+				})
+				.create();
+		server.start();
+		try {
+			RemoteDataProvider subject = new RemoteDataProvider(true, "http://localhost:11331/test/query=smth", null, "entries");
+			@SuppressWarnings("unchecked")
+			Collection<MorphDynaBean> actual = (Collection<MorphDynaBean>) subject.filter("smth");
 			Iterator<MorphDynaBean> it = actual.iterator();
 
 			MorphDynaBean actual1 = it.next();
@@ -74,7 +105,7 @@ public class RemoteDataProviderTest {
 				.create();
 		server.start();
 		try {
-			RemoteDataProvider subject = new RemoteDataProvider(true, "http://localhost:13311/test", null);
+			RemoteDataProvider subject = new RemoteDataProvider(true, "http://localhost:13311/test", null, "");
 
 			try {
 				// when

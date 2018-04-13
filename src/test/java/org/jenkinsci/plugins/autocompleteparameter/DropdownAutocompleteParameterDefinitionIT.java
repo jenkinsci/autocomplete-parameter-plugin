@@ -31,9 +31,9 @@ public class DropdownAutocompleteParameterDefinitionIT extends AbstractUiIT {
         String slowEndpoint = server.getAddress() + "/rest/users?slow=true";
         FreeStyleProject project = j.createFreeStyleProject("remote");
         DropdownAutocompleteParameterDefinition prefetchedParameter = new DropdownAutocompleteParameterDefinition("leader", "", "name", "email", "beethoven@mail.com"
-                , new RemoteDataProvider(true, endpoint, "credentials"));
+                , new RemoteDataProvider(true, endpoint, "credentials", ""));
         DropdownAutocompleteParameterDefinition asyncParameter = new DropdownAutocompleteParameterDefinition("sub-leader", "", "name", "email", ""
-                , new RemoteDataProvider(false, slowEndpoint, "credentials"));
+                , new RemoteDataProvider(false, slowEndpoint, "credentials", ""));
         project.addProperty(new ParametersDefinitionProperty(
                 prefetchedParameter, asyncParameter
         ));
@@ -43,7 +43,7 @@ public class DropdownAutocompleteParameterDefinitionIT extends AbstractUiIT {
     public Project setupJobWithAllDataProviders() throws IOException {
         FreeStyleProject project = j.createFreeStyleProject();
         DropdownAutocompleteParameterDefinition remoteParameter = new DropdownAutocompleteParameterDefinition("remote", "", "description", "full_name", ""
-                , new RemoteDataProvider(true, "https://api.github.com/search/repositories?q=${query}+user:jenkinsci", null));
+                , new RemoteDataProvider(true, "https://api.github.com/search/repositories?q=${query}+user:jenkinsci", null, ""));
         DropdownAutocompleteParameterDefinition groovyParameter = new DropdownAutocompleteParameterDefinition("groovy", "", "value", "key", ""
                 , new GroovyDataProvider("return ['1':'One', '2':'Two', '3':'Three', '5':'Five', '8':'Eight', '13':'Thirteen'].entrySet()"
                 , true, null));
