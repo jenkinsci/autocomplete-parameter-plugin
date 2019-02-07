@@ -39,4 +39,20 @@ public class JSONUtils {
 		
 		return list;
 	}
+
+	public static String traverseJson(String data, String xpath) {
+		if (StringUtils.isEmpty(xpath)) {
+			return data;
+		}
+		JSON json = JSONSerializer.toJSON(data);
+
+		for (String part: xpath.split("/")) {
+			if (json instanceof JSONObject) {
+				json = JSONSerializer.toJSON(((JSONObject) json).get(part));
+			} else if (json instanceof JSONArray) {
+				json = JSONSerializer.toJSON(((JSONArray) json).get(Integer.parseInt(part)));
+			}
+		}
+		return json.toString();
+	}
 }

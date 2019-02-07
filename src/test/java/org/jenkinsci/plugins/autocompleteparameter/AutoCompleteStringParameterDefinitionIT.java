@@ -28,9 +28,9 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
         String slowEndpoint = server.getAddress() + "/rest/users?slow=true";
         FreeStyleProject project = j.createFreeStyleProject("remote");
         AutoCompleteStringParameterDefinition prefetchedParameter = new AutoCompleteStringParameterDefinition("user", "", "", "name", "email", false
-                , new RemoteDataProvider(true, endpoint, "credentials"));
+                , new RemoteDataProvider(true, endpoint, "credentials", ""));
         AutoCompleteStringParameterDefinition asyncParameter = new AutoCompleteStringParameterDefinition("other", "", "", "name", "email", false
-                , new RemoteDataProvider(false, slowEndpoint, "credentials"));
+                , new RemoteDataProvider(false, slowEndpoint, "credentials", ""));
         project.addProperty(new ParametersDefinitionProperty(
                 prefetchedParameter, asyncParameter
         ));

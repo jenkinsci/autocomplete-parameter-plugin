@@ -34,17 +34,19 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 	private boolean prefetch;
 	private String autoCompleteUrl;
 	private String credentialsId;
-	
+	private String xpath;
+
 	@DataBoundConstructor
-	public RemoteDataProvider(boolean prefetch, String autoCompleteUrl, String credentialsId) {
+	public RemoteDataProvider(boolean prefetch, String autoCompleteUrl, String credentialsId, String xpath) {
 		this.prefetch = prefetch;
 		this.autoCompleteUrl = autoCompleteUrl;
 		this.credentialsId = credentialsId;
+		this.xpath = xpath;
 	}
 
 	@Override
 	public Collection<?> getData() {
-		return JSONUtils.toCanonicalCollection(performRequest(autoCompleteUrl, credentialsId));
+		return mapData(performRequest(autoCompleteUrl, credentialsId));
 	}
 
 	@Override
@@ -55,12 +57,8 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 		} catch (UnsupportedEncodingException e) {
 			throw new RuntimeException(e);
 		}
-		return JSONUtils.toCanonicalCollection(
-				performRequest(
-						StrSubstitutor.replace(autoCompleteUrl, parameters)
-						, credentialsId
-				)
-		);
+		String url = StrSubstitutor.replace(autoCompleteUrl, parameters);
+		return mapData(performRequest(url, credentialsId));
 	}
 
 	@Override
@@ -69,15 +67,20 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 	}
 
 	@Exported
+	public String getXpath() {
+		return xpath;
+	}
+
+	@Exported
 	public String getCredentialsId() {
 		return credentialsId;
 	}
-	
+
 	@Exported
 	public String getAutoCompleteUrl() {
 		return autoCompleteUrl;
 	}
-	
+
 	@Extension
 	public static final class DescriptorImpl extends Descriptor<AutocompleteDataProvider> {
 		@Override
@@ -105,7 +108,7 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
             		.includeCurrentValue(credentialsId);
         }
 	}
-	
+
 	private static String performRequest(String uri, String credentialsId) {
 		return RequestBuilder
 				.url(GlobalVariableUtils.resolveVariables(uri))
@@ -114,5 +117,10 @@ public class RemoteDataProvider extends AutocompleteDataProvider {
 				.credentials(credentialsId)
 				.get()
 				.content;
+	}
+
+	private Collection<?> mapData(String data) {
+        String options = JSONUtils.traverseJson(data, xpath);
+        return JSONUtils.toCanonicalCollection(options);
 	}
 }
