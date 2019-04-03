@@ -11,7 +11,7 @@ function evaluateExpression(expression, bindings, errorHandler)
         script.push("(function(){");
         for (var key in v) {
             var value=v[key];
-            script.push("var " + key+"='"+value.replace(/'/g,"\\'")+"';");
+            script.push("var " + key + "=" + Object.toJSON(value) + ";");
         }
         var expr = expression.substr(1,expression.length-2);
         if (expr.trim().length == 0) {
@@ -21,7 +21,12 @@ function evaluateExpression(expression, bindings, errorHandler)
         }
         script.push("return " + expr);
         script.push("})()");
-        return eval(script.join(""));
+        var result = eval(script.join(""));
+        if(result === undefined)
+            return 'undefined';
+        if(result === null)
+            return 'null';
+        return result;
     }catch(e) {
         errorHandler("Failure evaluating expression : '"+expression+"' "+ e.message);
     }
@@ -50,7 +55,7 @@ function createSelect2($, $element, displayExpression, valueExpression, dropdown
     function removeLoadingIcon() {
       $(loadingImg).remove();
       loadingImg = null;
-    };
+    }
     config.minimumInputLength = 1;
     config.ajax = {
       transport: function(params, success, failure) {

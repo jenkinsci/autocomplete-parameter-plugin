@@ -85,17 +85,35 @@ public class BuildWithParametersPage extends AbstractPage {
         }
     }
 
-    public class Token {
+    public class ElementWrapper<T extends ElementWrapper<T>> {
+
+        private final T self;
+
+        public ElementWrapper() {
+            @SuppressWarnings("unchecked")
+            T self = (T)this;
+            this.self = self;
+        }
+
+        public T sendKeys(String keys) {
+            WebElement focused = webDriver.switchTo().activeElement();
+            focused.sendKeys(keys);
+            return self;
+        }
+
+        public T sendKeys(Keys code) {
+            WebElement focused = webDriver.switchTo().activeElement();
+            focused.sendKeys(code);
+            return self;
+        }
+    }
+
+    public class Token extends ElementWrapper<Token> {
 
         private final WebElement element;
 
         public Token(WebElement element) {
             this.element = element;
-        }
-
-        public Token sendKeys(Keys code) {
-            element.sendKeys(code);
-            return this;
         }
 
         public Token click() {
@@ -104,7 +122,7 @@ public class BuildWithParametersPage extends AbstractPage {
         }
     }
 
-    public class DropdownParameter {
+    public class DropdownParameter extends ElementWrapper<DropdownParameter> {
 
         private final WebElement parentDiv;
         private final WebElement select;
@@ -121,16 +139,6 @@ public class BuildWithParametersPage extends AbstractPage {
             return this;
         }
 
-        public DropdownParameter sendKeys(String keys) {
-            select.sendKeys(keys);
-            return this;
-        }
-
-        public DropdownParameter sendKeys(Keys code) {
-            select.sendKeys(code);
-            return this;
-        }
-
         public WebElement getDropdownBoxHighlightedItem() {
             return webDriver.findElement(dropdownBoxHighlightedItemSelector());
         }
@@ -143,7 +151,7 @@ public class BuildWithParametersPage extends AbstractPage {
             return By.cssSelector(".select2-results__option--highlighted");
         }
 
-        public By loadingIconSelector() {
+        private By loadingIconSelector() {
             return By.cssSelector("img");
         }
 

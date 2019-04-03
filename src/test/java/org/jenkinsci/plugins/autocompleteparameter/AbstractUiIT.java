@@ -3,6 +3,7 @@ package org.jenkinsci.plugins.autocompleteparameter;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Rule;
+import org.junit.rules.TestName;
 import org.jvnet.hudson.test.JenkinsRule;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -14,6 +15,9 @@ public abstract class AbstractUiIT {
 
     @Rule
     public JenkinsRule j = new JenkinsRule();
+
+    @Rule
+    public TestName testName = new TestName();
 
     public static WebDriver webDriver;
 

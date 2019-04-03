@@ -29,7 +29,7 @@ public class DropdownAutocompleteParameterDefinitionIT extends AbstractUiIT {
     public Project setupJobWithRemoteDataProvider(RemoteServerMock server) throws IOException {
         String endpoint = server.getAddress() + "/rest/users";
         String slowEndpoint = server.getAddress() + "/rest/users?slow=true";
-        FreeStyleProject project = j.createFreeStyleProject("remote");
+        FreeStyleProject project = j.createFreeStyleProject(testName.getMethodName());
         DropdownAutocompleteParameterDefinition prefetchedParameter = new DropdownAutocompleteParameterDefinition("leader", "", "name", "email", "beethoven@mail.com"
                 , new RemoteDataProvider(true, endpoint, "credentials"));
         DropdownAutocompleteParameterDefinition asyncParameter = new DropdownAutocompleteParameterDefinition("sub-leader", "", "name", "email", ""
@@ -41,7 +41,7 @@ public class DropdownAutocompleteParameterDefinitionIT extends AbstractUiIT {
     }
 
     public Project setupJobWithAllDataProviders() throws IOException {
-        FreeStyleProject project = j.createFreeStyleProject();
+        FreeStyleProject project = j.createFreeStyleProject(testName.getMethodName());
         DropdownAutocompleteParameterDefinition remoteParameter = new DropdownAutocompleteParameterDefinition("remote", "", "description", "full_name", ""
                 , new RemoteDataProvider(true, "https://api.github.com/search/repositories?q=${query}+user:jenkinsci", null));
         DropdownAutocompleteParameterDefinition groovyParameter = new DropdownAutocompleteParameterDefinition("groovy", "", "value", "key", ""
@@ -68,7 +68,19 @@ public class DropdownAutocompleteParameterDefinitionIT extends AbstractUiIT {
         return project;
     }
 
-    public RemoteServerMock remoteServer() throws IOException {
+    public Project setupJobWithInlineJsonDataProvider(String json, String displayExpression, String valueExpression) throws IOException {
+        FreeStyleProject project = j.createFreeStyleProject(testName.getMethodName());
+
+        DropdownAutocompleteParameterDefinition inlineParameter = new DropdownAutocompleteParameterDefinition("inline", "", displayExpression, valueExpression, ""
+                , new InlineJsonDataProvider(json));
+
+        project.addProperty(new ParametersDefinitionProperty(
+                inlineParameter
+        ));
+        return project;
+    }
+
+    public RemoteServerMock remoteServer() {
         return new RemoteServerMock();
     }
 
@@ -125,5 +137,61 @@ public class DropdownAutocompleteParameterDefinitionIT extends AbstractUiIT {
         dataProvider = simple.getDataProvider();
         assertThat(dataProvider.getType(), is(DataProviderType.SIMPLE));
         assertThat(dataProvider.getMainValue(), is(dataProvider.getPersistedMainValue()));
+    }
+
+    @Test
+    public void dataWithNumber() throws IOException {
+        String json = "[{'id':1,'value':1}, {'id':2,'value':2}]";
+        Project project = setupJobWithInlineJsonDataProvider(json, "value * 100", "id * 2");
+
+        BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(this, project);
+
+        DropdownParameter template = buildWithParametersPage.getDropdown("inline");
+        template.click().sendKeys("10");
+        assertThat(template.getDropdownBoxHighlightedItem(), isVisible());
+        template.getDropdownBoxHighlightedItem().click();
+        assertThat(template.getValue(), equalTo("2"));
+    }
+
+    @Test
+    public void dataWithNull() throws IOException {
+        String json = "[{'id':1,'name':null}, {'id':2,'name':'example'}]";
+        Project project = setupJobWithInlineJsonDataProvider(json, "name", "id");
+
+        BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(this, project);
+
+        DropdownParameter template = buildWithParametersPage.getDropdown("inline");
+        template.click().sendKeys("nul");
+        assertThat(template.getDropdownBoxHighlightedItem(), isVisible());
+        template.getDropdownBoxHighlightedItem().click();
+        assertThat(template.getValue(), equalTo("1"));
+    }
+
+    @Test
+    public void dataWithObject() throws IOException {
+        String json = "[{'id':1,'value':{'name':'demo'}}, {'id':2,'value':{'name':'sample'}}]";
+        Project project = setupJobWithInlineJsonDataProvider(json, "value.name", "id");
+
+        BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(this, project);
+
+        DropdownParameter template = buildWithParametersPage.getDropdown("inline");
+        template.click().sendKeys("sam");
+        assertThat(template.getDropdownBoxHighlightedItem(), isVisible());
+        template.getDropdownBoxHighlightedItem().click();
+        assertThat(template.getValue(), equalTo("2"));
+    }
+
+    @Test
+    public void dataWithArray() throws IOException {
+        String json = "[{'id':1,'value':['A','B','C',1]}, {'id':2,'value':['X','Y','Z',2]}]";
+        Project project = setupJobWithInlineJsonDataProvider(json, "value[0] + value[1] + value[2] + value[3]", "id");
+
+        BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(this, project);
+
+        DropdownParameter template = buildWithParametersPage.getDropdown("inline");
+        template.click().sendKeys("XY");
+        assertThat(template.getDropdownBoxHighlightedItem(), isVisible());
+        template.getDropdownBoxHighlightedItem().click();
+        assertThat(template.getValue(), equalTo("2"));
     }
 }
