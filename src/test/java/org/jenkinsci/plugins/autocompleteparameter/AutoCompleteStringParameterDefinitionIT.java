@@ -12,7 +12,6 @@ import org.jenkinsci.plugins.autocompleteparameter.providers.RemoteDataProvider;
 import org.jenkinsci.plugins.autocompleteparameter.providers.SimpleTextProvider;
 import org.junit.Test;
 import org.openqa.selenium.Keys;
-import org.xml.sax.SAXException;
 
 import java.io.IOException;
 
@@ -23,7 +22,7 @@ import static org.junit.Assert.assertThat;
 
 public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
 
-    public Project setupJobWithRemoteDataProvider(RemoteServerMock server) throws IOException {
+    public Project<?, ?> setupJobWithRemoteDataProvider(RemoteServerMock server) throws IOException {
         String endpoint = server.getAddress() + "/rest/users";
         String slowEndpoint = server.getAddress() + "/rest/users?slow=true";
         FreeStyleProject project = j.createFreeStyleProject("remote");
@@ -37,7 +36,7 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
         return project;
     }
 
-    public Project setupJobWithGroovyDataProvider() throws IOException {
+    public Project<?, ?> setupJobWithGroovyDataProvider() throws IOException {
         FreeStyleProject project = j.createFreeStyleProject("groovy");
         AutoCompleteStringParameterDefinition groovyParameter = new AutoCompleteStringParameterDefinition("fibonacci", "", "", "value", "key", false
                 , new GroovyDataProvider("return ['1':'One', '2':'Two', '3':'Three', '5':'Five', '8':'Eight', '13':'Thirteen'].entrySet()"
@@ -48,7 +47,7 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
         return project;
     }
 
-    public Project setupJobWithInlineJsonDataProvider() throws IOException {
+    public Project<?, ?> setupJobWithInlineJsonDataProvider() throws IOException {
         FreeStyleProject project = j.createFreeStyleProject("inline");
         AutoCompleteStringParameterDefinition inlineParameter = new AutoCompleteStringParameterDefinition("characters", "", "", "name", "id", false
                 , new InlineJsonDataProvider("["
@@ -64,7 +63,7 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
         return project;
     }
 
-    public Project setupJobWithSimpleTextProvider() throws IOException {
+    public Project<?, ?> setupJobWithSimpleTextProvider() throws IOException {
         FreeStyleProject project = j.createFreeStyleProject("simple");
         AutoCompleteStringParameterDefinition simpleParameter = new AutoCompleteStringParameterDefinition("hackers", "", "", "value.split('|')[1]", "value.split('|')[0]", false
                 , new SimpleTextProvider(
@@ -79,17 +78,17 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
         return project;
     }
 
-    public RemoteServerMock remoteServer() throws IOException {
+    public RemoteServerMock remoteServer() {
         return new RemoteServerMock();
     }
 
     @Test
-    public void remoteDataProvider() throws IOException, SAXException, InterruptedException {
+    public void remoteDataProvider() throws IOException {
         try(RemoteServerMock server = remoteServer()) {
             server.start();
-            Project project = setupJobWithRemoteDataProvider(server);
+            Project<?, ?> project = setupJobWithRemoteDataProvider(server);
 
-            BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(this, project);
+            BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(webDriver, j, project);
             String html = webDriver.getPageSource();
             assertThat(html, containsString("Beethoven"));
             assertThat(html, containsString("Chopin"));
@@ -116,28 +115,28 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
 
     @Test
     public void groovyDataProvider() throws IOException {
-        Project project = setupJobWithGroovyDataProvider();
+    	Project<?, ?> project = setupJobWithGroovyDataProvider();
 
-        BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(this, project);
+        BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(webDriver, j, project);
         String html = webDriver.getPageSource();
         assertThat(html, containsString("Five"));
         assertThat(html, containsString("Eight"));
         assertThat(html, containsString("Thirteen"));
 
         AutoCompleteParameter fibonacci = buildWithParametersPage.getAutoComplete("fibonacci");
-        fibonacci.sendKeys("On").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
-        fibonacci.sendKeys("Tw").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
-        fibonacci.sendKeys("Th").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
-        fibonacci.sendKeys("Th").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        fibonacci.sendKeys("On").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        fibonacci.sendKeys("Tw").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        fibonacci.sendKeys("Th").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        fibonacci.sendKeys("Th").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
 
         assertThat(fibonacci.getValue(), equalTo("1, 2, 3, 13"));
     }
 
     @Test
     public void inlineJsonDataProvider() throws IOException {
-        Project project = setupJobWithInlineJsonDataProvider();
+    	Project<?, ?> project = setupJobWithInlineJsonDataProvider();
 
-        BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(this, project);
+        BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(webDriver, j, project);
         String html = webDriver.getPageSource();
         assertThat(html, containsString("Stark"));
         assertThat(html, containsString("Snow"));
@@ -145,10 +144,10 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
         assertThat(html, containsString("Baratheon"));
 
         AutoCompleteParameter characters = buildWithParametersPage.getAutoComplete("characters");
-        characters.sendKeys("rob").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
-        characters.sendKeys("edd").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
-        characters.sendKeys("sno").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
-        characters.sendKeys("tyr").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        characters.sendKeys("rob").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        characters.sendKeys("edd").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        characters.sendKeys("sno").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        characters.sendKeys("tyr").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
 
         assertThat(characters.getValue(), equalTo("rbaratheon, estark, jsnow, tlannister"));
         characters.getToken("Robert Baratheon").click().sendKeys(Keys.DELETE);
@@ -158,9 +157,9 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
 
     @Test
     public void simpleDataProvider() throws IOException {
-        Project project = setupJobWithSimpleTextProvider();
+    	Project<?, ?> project = setupJobWithSimpleTextProvider();
 
-        BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(this, project);
+        BuildWithParametersPage buildWithParametersPage = Pages.openBuildWithParameters(webDriver, j, project);
         String html = webDriver.getPageSource();
         assertThat(html, containsString("Lovelace"));
         assertThat(html, containsString("Jobs"));
@@ -168,10 +167,10 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
         assertThat(html, containsString("Torvalds"));
 
         AutoCompleteParameter hackers = buildWithParametersPage.getAutoComplete("hackers");
-        hackers.sendKeys("jobs").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
-        hackers.sendKeys("bill").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
-        hackers.sendKeys("ada").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
-        hackers.sendKeys("linus").sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        hackers.sendKeys("jobs").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        hackers.sendKeys("bill").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        hackers.sendKeys("ada").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
+        hackers.sendKeys("linus").waitSuggestionBoxVisible().sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
 
         assertThat(hackers.getValue(), equalTo("sj, bg, al, lt"));
     }
