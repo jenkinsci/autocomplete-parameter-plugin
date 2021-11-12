@@ -104,9 +104,9 @@ public class AutoCompleteStringParameterDefinitionIT extends AbstractUiIT {
             // test async autocomplete
             AutoCompleteParameter other = buildWithParametersPage.getAutoComplete("other");
             other.sendKeys("Fred");
-            doWait().until(other.loadingIconVisible());
+            doWait().until(__ -> other.loadingIconVisible());
             assertThat(other.getLoadingIcon(), isVisible());
-            doWait().until(other.suggestionsBoxVisible());
+            doWait().until(__ -> other.suggestionsBoxVisible());
             assertThat(other.getSuggestionsBox(), isVisible());
             other.sendKeys(Keys.DOWN).sendKeys(Keys.RETURN);
             assertThat(other.getValue(), equalTo("chopin@mail.com"));

@@ -27,7 +27,7 @@ import static org.junit.Assert.fail;
 public class RemoteDataProviderTest {
 	@Test
 	public void happyDay() throws IOException {
-		HttpServer server = ServerBootstrap.bootstrap().setListenerPort(11331)
+		HttpServer server = ServerBootstrap.bootstrap().setListenerPort(11332)
 				.registerHandler("/test", new HttpRequestHandler() {
 					@Override
 					public void handle(HttpRequest arg0, HttpResponse response, HttpContext arg2) throws HttpException, IOException {
@@ -38,7 +38,7 @@ public class RemoteDataProviderTest {
 				.create();
 		server.start();
 		try {
-			RemoteDataProvider subject = new RemoteDataProvider(true, "http://localhost:11331/test", null);
+			RemoteDataProvider subject = new RemoteDataProvider(true, "http://localhost:11332/test", null);
 			@SuppressWarnings("unchecked")
 			Collection<MorphDynaBean> actual = (Collection<MorphDynaBean>) subject.getData();
 			Iterator<MorphDynaBean> it = actual.iterator();
