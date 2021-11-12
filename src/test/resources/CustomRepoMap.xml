@@ -2,15 +2,15 @@
 <root>
     <windows>
         <driver id="marionette">
-            <version id="0.23.0">
+            <version id="0.30.0">
                 <bitrate sixtyfourbit="true">
-                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-win64.zip</filelocation>
-                    <hash>23d3c5e30a5d646ef62eb184737d24451a1229f4</hash>
+                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-win64.zip</filelocation>
+                    <hash>b8cf8673d88ef570d5a568803d85580d2267c064</hash>
                     <hashtype>sha1</hashtype>
                 </bitrate>
                 <bitrate thirtytwobit="true">
-                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-win32.zip</filelocation>
-                    <hash>8feb0fe8655c6b67dd5afb714a50bdca810cbf7a</hash>
+                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-win32.zip</filelocation>
+                    <hash>beb47e9016dbbeb5bc513a890bdb00d122542bdf</hash>
                     <hashtype>sha1</hashtype>
                 </bitrate>
             </version>
@@ -18,15 +18,15 @@
     </windows>
     <linux>
         <driver id="marionette">
-            <version id="0.23.0">
+            <version id="0.30.0">
                 <bitrate sixtyfourbit="true">
-                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-linux64.tar.gz</filelocation>
-                    <hash>7d387a162abc0baba91b56fa1258c3715263f67a</hash>
+                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-linux64.tar.gz</filelocation>
+                    <hash>aa80b27fb12473265cfc33de1ad7b545c9f70a86</hash>
                     <hashtype>sha1</hashtype>
                 </bitrate>
-                <bitrate arm="true">
-                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-arm7hf.tar.gz</filelocation>
-                    <hash>1788cb6756d72c50ac2408e0dc60b778cb40f626</hash>
+                <bitrate thirtytwobit="true">
+                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-linux32.tar.gz</filelocation>
+                    <hash>2e157cf548302ef178ac808886539c115a24ec98</hash>
                     <hashtype>sha1</hashtype>
                 </bitrate>
             </version>
@@ -34,10 +34,10 @@
     </linux>
     <osx>
         <driver id="marionette">
-            <version id="0.23.0">
+            <version id="0.30.0">
                 <bitrate thirtytwobit="true" sixtyfourbit="true">
-                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.23.0/geckodriver-v0.23.0-macos.tar.gz</filelocation>
-                    <hash>4340269571d26eea0242c0fc106097d0f4d4b059</hash>
+                    <filelocation>https://github.com/mozilla/geckodriver/releases/download/v0.30.0/geckodriver-v0.30.0-macos.tar.gz</filelocation>
+                    <hash>843e1c0cbfb7e57ff035a74a42ee0ec012a6efd3</hash>
                     <hashtype>sha1</hashtype>
                 </bitrate>
             </version>

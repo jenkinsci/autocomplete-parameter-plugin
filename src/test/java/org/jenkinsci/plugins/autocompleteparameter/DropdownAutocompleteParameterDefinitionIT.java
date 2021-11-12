@@ -103,9 +103,9 @@ public class DropdownAutocompleteParameterDefinitionIT extends AbstractUiIT {
             // test async dropdown
             DropdownParameter subLeader = buildWithParametersPage.getDropdown("sub-leader");
             subLeader.click().sendKeys("Fred");
-            doWait().until(subLeader.loadingIconVisible());
+            doWait().until(__ -> subLeader.loadingIconVisible());
             assertThat(subLeader.getLoadingIcon(), isVisible());
-            doWait().until(subLeader.dropdownBoxHighlightedItemVisible());
+            doWait().until(__ -> subLeader.dropdownBoxHighlightedItemVisible());
             assertThat(subLeader.getDropdownBoxHighlightedItem(), isVisible());
             subLeader.sendKeys(Keys.RETURN);
             assertThat(subLeader.getValue(), equalTo("chopin@mail.com"));

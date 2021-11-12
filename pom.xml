@@ -5,17 +5,17 @@
 	<parent>
 		<groupId>org.jenkins-ci.plugins</groupId>
 		<artifactId>plugin</artifactId>
-		<version>2.11</version>
+		<version>4.24</version>
 	</parent>
 	<artifactId>autocomplete-parameter</artifactId>
 	<version>1.1-SNAPSHOT</version>
 	<packaging>hpi</packaging>
 
 	<properties>
-		<jenkins.version>1.625.3</jenkins.version>
+		<jenkins.version>2.303.3</jenkins.version>
 		<java.level>8</java.level>
-		<jenkins-test-harness.version>2.13</jenkins-test-harness.version>
-		<selenium.version>3.4.0</selenium.version>
+		<jenkins-test-harness.version>2.31</jenkins-test-harness.version>
+		<selenium.version>4.0.0</selenium.version>
 	</properties>
 
 	<name>Autocomplete Parameter Plugin</name>
@@ -26,8 +26,7 @@
 		<connection>scm:git:https://github.com/jenkinsci/autocomplete-parameter.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/jenkinsci/autocomplete-parameter.git</developerConnection>
 		<url>https://github.com/jenkinsci/autocomplete-parameter/</url>
-	  <tag>HEAD</tag>
-  </scm>
+  	</scm>
 
 
 	<licenses>
@@ -52,6 +51,16 @@
 
 	<dependencies>
 		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>31.0.1-jre</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-jdk14</artifactId>
+			<version>1.7.31</version>
+		</dependency>
+		<dependency>
 			<groupId>org.jenkins-ci.plugins</groupId>
 			<artifactId>credentials</artifactId>
 			<version>2.3.19</version>
@@ -59,7 +68,7 @@
 		<dependency>
 			<groupId>org.jenkins-ci.plugins</groupId>
 			<artifactId>script-security</artifactId>
-			<version>1.26</version>
+			<version>1.42</version>
 		</dependency>
         <dependency>
             <groupId>org.jenkins-ci.ui</groupId>
@@ -94,6 +103,41 @@
 			<version>${selenium.version}</version>
 			<scope>test</scope>
 		</dependency>
+		<dependency>
+			<groupId>com.sun.activation</groupId>
+			<artifactId>jakarta.activation</artifactId>
+			<version>1.2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>jcl-over-slf4j</artifactId>
+			<version>1.7.31</version>
+		</dependency>
+		<dependency>
+			<groupId>org.kohsuke</groupId>
+			<artifactId>access-modifier-annotation</artifactId>
+			<version>1.25</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>log4j-over-slf4j</artifactId>
+			<version>1.7.31</version>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-api</artifactId>
+			<version>1.7.31</version>
+		</dependency>
+		<dependency>
+			<groupId>com.github.spotbugs</groupId>
+			<artifactId>spotbugs-annotations</artifactId>
+			<version>4.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.jenkins-ci</groupId>
+			<artifactId>annotation-indexer</artifactId>
+			<version>1.15</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<resources>
@@ -109,7 +153,7 @@
 				<!-- https://github.com/Ardesco/selenium-standalone-server-plugin/ -->
 				<groupId>com.lazerycode.selenium</groupId>
 				<artifactId>driver-binary-downloader-maven-plugin</artifactId>
-				<version>1.0.14</version>
+				<version>1.0.18</version>
 				<configuration>
 					<rootStandaloneServerDirectory>${project.basedir}/drivers</rootStandaloneServerDirectory>
 					<downloadedZipFileDirectory>${project.basedir}/drivers</downloadedZipFileDirectory>
