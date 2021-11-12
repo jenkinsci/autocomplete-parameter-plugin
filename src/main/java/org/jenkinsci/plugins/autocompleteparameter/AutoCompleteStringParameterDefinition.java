@@ -1,6 +1,7 @@
 package org.jenkinsci.plugins.autocompleteparameter;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 import org.jenkinsci.plugins.autocompleteparameter.providers.AutocompleteDataProvider;
@@ -134,4 +135,14 @@ public class AutoCompleteStringParameterDefinition extends StringParameterDefini
         	return AutocompleteDataProvider.all();
         }
     }
+
+    @Override
+	public boolean equals(Object other) {
+		return super.equals(other);
+	}
+
+	@Override
+	public int hashCode() {
+		return super.hashCode();
+	}
 }

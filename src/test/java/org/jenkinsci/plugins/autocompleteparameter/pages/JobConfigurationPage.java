@@ -23,7 +23,7 @@ public class JobConfigurationPage extends AbstractPage {
     }
 
     public Parameter getParameter(String name) {
-        WebElement parentDiv = webDriver.findElement(By.xpath("//div[@name='parameter'][descendant::input[@value='" + name + "']]"));
+        WebElement parentDiv = webDriver.findElement(By.xpath("//div[@name='parameterDefinitions'][descendant::input[@value='" + name + "']]"));
         return new Parameter(parentDiv, name);
     }
 
@@ -60,7 +60,7 @@ public class JobConfigurationPage extends AbstractPage {
             this.parentDiv = parentDiv;
             this.name = name;
             this.dataProviderSelector = parentDiv.findElement(By.cssSelector("select.setting-input.dropdownList"));
-            this.dataProvider = parentDiv.findElement(By.cssSelector("table[name=dataProvider]"));
+            this.dataProvider = parentDiv.findElement(By.cssSelector("div[name=dataProvider]"));
         }
 
         public DataProvider getDataProvider() {
