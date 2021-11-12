@@ -8,7 +8,7 @@
 		<version>4.24</version>
 	</parent>
 	<artifactId>autocomplete-parameter</artifactId>
-	<version>1.2</version>
+	<version>1.3-SNAPSHOT</version>
 	<packaging>hpi</packaging>
 
 	<properties>
@@ -26,7 +26,7 @@
 		<connection>scm:git:https://github.com/jenkinsci/autocomplete-parameter.git</connection>
 		<developerConnection>scm:git:ssh://git@github.com/jenkinsci/autocomplete-parameter.git</developerConnection>
 		<url>https://github.com/jenkinsci/autocomplete-parameter/</url>
-  	  <tag>autocomplete-parameter-1.2</tag>
+  	  <tag>HEAD</tag>
   </scm>
 
 
