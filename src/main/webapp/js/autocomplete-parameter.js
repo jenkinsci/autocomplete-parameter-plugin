@@ -11,7 +11,7 @@ function evaluateExpression(expression, bindings, errorHandler)
         script.push("(function(){");
         for (var key in v) {
             var value=v[key];
-            script.push("var " + key + "=" + Object.toJSON(value) + ";");
+            script.push("var " + key + "=" + JSON.stringify(value) + ";");
         }
         var expr = expression.substr(1,expression.length-2);
         if (expr.trim().length == 0) {
